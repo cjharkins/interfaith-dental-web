@@ -2,6 +2,12 @@
   "name": "interfaith-dental-web",
   "version": "0.1.0",
   "private": true,
+  "license": "LicenseRef-LICENSE",
+  "contributors": [
+    "Cory Harkins <charkins.dev@gmail.com> Front-end",
+    "Terrence Mahnken <terrencemm2@gmail.com> Front-end",
+    "Natasha Cox <natasha.cox@hcahealthcare.com> Project Lead"
+  ],
   "dependencies": {
     "@reduxjs/toolkit": "^1.2.5",
     "@testing-library/jest-dom": "^4.2.4",
@@ -27,6 +33,11 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "prettier": {
+    "trailingComma": "es5",
+    "semi": false,
+    "singleQuote": true
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -38,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "2.0.5"
   }
 }
