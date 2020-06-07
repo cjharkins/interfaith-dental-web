@@ -1,58 +1,14 @@
-import React from 'react'
-import logo from './logo.svg'
+import React, { FC } from 'react'
 import './App.css'
-import Button from '@material-ui/core/Button'
+import Header from './components/Header'
+import { ProgressBar } from './components/ProgressBar'
 
-function App() {
+const App: FC = (props): JSX.Element => {
   return (
-    <div className="App">
-      <Button variant="contained" color="primary">
-        Yoh
-      </Button>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div style={{ display: 'flex', width: '100%' }}>
+      <Header>
+        <ProgressBar completed={100} />
+      </Header>
     </div>
   )
 }
