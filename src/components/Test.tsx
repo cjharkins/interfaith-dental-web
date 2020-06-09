@@ -1,31 +1,13 @@
-import * as React from "react";
-import { Action, Dispatch } from "redux";
-import { ThunkAction } from '@reduxjs/toolkit';
-import { useDispatch, connect } from "react-redux";
-import { RootState } from "../store";
+import React, { FC } from 'react'
+import { useDispatch } from 'react-redux'
+import { getData } from '../store/test/actions'
 
-import { TestState } from "../store/test/types";
-import { getData } from "../store/test/actions";
+const Test: FC = () => {
+  const dispatch = useDispatch()
 
-const dispatch = useDispatch();
+  dispatch(getData())
 
-class Test extends React.Component {
-    render() {
-        return (
-            <div>This is a test.</div>
-        );
-    }
+  return <div>This is a test.</div>
 }
 
-const mapStateToProps = (state: RootState) => ({
-    test: state.test
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    componentDidMount: () => dispatch(getData)
-})
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Test);
+export default Test

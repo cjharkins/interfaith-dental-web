@@ -1,16 +1,11 @@
-export interface Data {
-    data: object;
-}
-
 export interface TestState {
-    data: object
+    data: object | undefined
+    fetching: boolean | undefined
 }
 
 export const GET_DATA = 'GET_DATA';
 
-interface GetDataAction {
-    type: typeof GET_DATA,
-    payload: Data
+export interface AnyAction {
+    type: string | undefined
+    payload: any | undefined
 }
-
-export type TestActionTypes = GetDataAction;

@@ -1,29 +1,26 @@
-import { createStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import {
+  applyMiddleware,
+  createStore,
+  combineReducers,
+} from '@reduxjs/toolkit'
+import { composeWithDevTools } from 'redux-devtools-extension'
+import thunkMiddleware from 'redux-thunk'
 
-import { formReducer } from "./form/reducers";
-import { authReducer } from "./auth/reducers";
-import { testReducer } from "./test/reducers";
+import { formReducer } from './form/reducers'
+import { authReducer } from './auth/reducers'
+import { testReducer } from './test/reducers'
 
 const rootReducer = combineReducers({
   auth: authReducer,
   form: formReducer,
-  test: testReducer
-});
+  test: testReducer,
+})
 
 export default function configureStore() {
   const store = createStore(
     rootReducer,
-    composeWithDevTools()
-  );
+    composeWithDevTools(applyMiddleware(thunkMiddleware))
+  )
 
-  return store;
+  return store
 }
-
-export type RootState = ReturnType<typeof rootReducer>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
