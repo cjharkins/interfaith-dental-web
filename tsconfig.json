@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "lib": [
+      "es5",
       "dom",
       "dom.iterable",
       "esnext"
@@ -11,6 +15,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -21,5 +26,9 @@
   },
   "include": [
     "src"
+  ],
+  "interface-name": [
+    true,
+    "never-prefix"
   ]
 }
