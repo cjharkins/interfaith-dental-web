@@ -7,7 +7,7 @@ const App: FC = (props): JSX.Element => {
   return (
     <div style={{ display: 'flex', width: '100%' }}>
       <Header>
-        <ProgressBar completed={100} />
+        <ProgressBar completed={40} />
       </Header>
     </div>
   )
