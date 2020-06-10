@@ -8,7 +8,9 @@ export const ProgressBar: FC<ProgressBarProps> = ({ completed }) => {
   return (
     <div
       style={{
-        flex: '1 0 522px',
+        flex: '1 1 522px',
+        maxWidth: '522px',
+        marginRight: '30px',
         display: 'flex',
         justifyContent: 'space-between',
         alignContent: 'center',
