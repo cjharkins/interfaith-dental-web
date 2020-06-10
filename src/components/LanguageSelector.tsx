@@ -3,7 +3,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 
 export const LanguageSelector: FC = () => {
-  const currentOptions = ['English', 'Espanol', 'Arabic']
+  const currentOptions = [
+    <span>English</span>,
+    <span>Espa&ntilde;ol</span>,
+    <span>Arabic</span>,
+  ]
   const [showOptions, setShowOptions] = useState(false)
   const [selectedOption, setSelectedOption] = useState('English')
 
@@ -43,7 +47,7 @@ export const LanguageSelector: FC = () => {
         {showOptions &&
           currentOptions.map((opt, index) => {
             return (
-              <div key={opt}>
+              <div key={opt.props.children}>
                 <div
                   style={{
                     cursor: 'pointer',
@@ -56,7 +60,7 @@ export const LanguageSelector: FC = () => {
                   }}
                   onClick={() => {
                     setShowOptions(false)
-                    setSelectedOption(opt)
+                    setSelectedOption(opt.props.children)
                   }}
                 >
                   {opt}
