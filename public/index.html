@@ -39,5 +39,22 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+      if (window.history && history.pushState) {
+        addEventListener('load', function () {
+          history.pushState(null, null, null) // creates new history entry with same URL
+          addEventListener('popstate', function () {
+            var stayOnPage = confirm(
+              'If you navigate away from this site your changes will be lost. Do you wish to proceed?'
+            )
+            if (!stayOnPage) {
+              history.pushState(null, null, null)
+            } else {
+              history.back()
+            }
+          })
+        })
+      }
+    </script>
   </body>
 </html>
