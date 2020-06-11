@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import Informational from './Informational/Informational'
 
 interface ScrollViewProps {
@@ -7,7 +8,7 @@ interface ScrollViewProps {
   count: number | undefined
 }
 
-const ScrollView: FC<ScrollViewProps> = ({ children, count, form }) => {
+const ScrollView: FC<ScrollViewProps> = ({ children, count = 0, form }) => {
   return (
     <div
       style={{
@@ -21,13 +22,15 @@ const ScrollView: FC<ScrollViewProps> = ({ children, count, form }) => {
       }}
     >
       {count === 0 ? (
-        <Informational informationType="welcome" didQualify={false} />
+        <>
+          <Informational informationType="welcome" didQualify={false} />
+        </>
       ) : (
         <>
           <div style={{ width: '100%', height: '685px', background: 'white' }}>
-            Form
+            <QuestionHeader count={count} />
           </div>
-          <a href={`#view${count}`}>
+          <a style={{ textDecoration: 'none'}} href={`#view${count}`}>
             <div
               style={{
                 width: '116px',
@@ -38,15 +41,58 @@ const ScrollView: FC<ScrollViewProps> = ({ children, count, form }) => {
                 justifyContent: 'center',
               }}
             >
-              <div style={{ margin: '0 auto', color: '#003B49' }}>Next</div>
+              <div style={{ margin: '5px auto 0', color: '#003B49' }}>NEXT</div>
               <div style={{ margin: '0 auto' }}>
-                <ExpandMoreIcon style={{ color: '#003B49' }} />
+                <ExpandMoreIcon
+                  style={{
+                    width: 45,
+                    height: 'auto',
+                    color: '#003B49',
+                  }}
+                />
               </div>
             </div>
           </a>
         </>
       )}
-      <div id={`view${count ? count : 0}`}></div>
+      <div id={`view${count ? count : 0}`} />
+    </div>
+  )
+}
+
+interface QuestionHeaderProps {
+  count: number | undefined
+}
+
+const QuestionHeader: FC<QuestionHeaderProps> = ({ count = 1 }) => {
+  return (
+    <div
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+    >
+      <div
+        style={{
+          width: 700,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <a href={`#view${count === 1 ? 'Top' : count - 2}`}>
+          <ExpandLessIcon
+            style={{
+              marginTop: 15,
+              width: 38,
+              height: 'auto',
+              color: '#003B49',
+            }}
+          />
+        </a>
+        <div style={{ width: '100%' }}>
+          <div style={{ borderBottom: '2px solid #EE2737', width: 120 }}>
+            <h3 style={{ fontSize: 36 }}>{count}.</h3>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
