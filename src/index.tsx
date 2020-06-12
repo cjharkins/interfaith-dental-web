@@ -6,14 +6,25 @@ import { store } from './store/store'
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
 import { ThemeProvider } from './ThemeContext'
+import { MediaBreakpointProvider } from './components/MediaBreakpointProvider'
+
+const queries = {
+  xs: '(max-width: 320px)',
+  sm: '(max-width: 720px)',
+  md: '(max-width: 1024px)',
+  lg: '(max-width: 1180px)',
+  or: '(orientation: portrait)', // we can check orientation also
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ThemeProvider>
+    <MediaBreakpointProvider queries={queries}>
+      <ThemeProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </ThemeProvider>
+    </MediaBreakpointProvider>
   </React.StrictMode>,
   document.getElementById('root')
 )

@@ -1,19 +1,21 @@
 import React, { FC } from 'react'
 
 interface LogoProps {
-  windowWidth: number | undefined
+  showSmall: boolean | undefined
 }
 
-const Logo: FC<LogoProps> = ({ windowWidth }) => {
-  return windowWidth && windowWidth >= 1121 ? (
+const Logo: FC<LogoProps> = ({ showSmall }) => {
+  return showSmall ? (
     <img
+      style={{ order: 1 }}
       height="80"
-      width="336"
-      src={require('../assets/images/IFD-Logo-Tag-Horizontal_CMYK.png')}
+      width="auto"
+      src={require('../assets/images/IFD-Logo-Tag-Vertical_WHITE.png')}
       alt="somelogo"
     />
   ) : (
     <img
+      style={{ order: 0 }}
       height="80"
       width="336"
       src={require('../assets/images/IFD-Logo-Tag-Horizontal_CMYK.png')}

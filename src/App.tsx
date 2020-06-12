@@ -4,8 +4,10 @@ import Header from './components/Header'
 import { ProgressBar } from './components/ProgressBar'
 import ScrolView from './components/ScrollView'
 import Informational from './components/Informational/Informational'
+import { useBreakpoint } from './components/MediaBreakpointProvider'
 
 const App: FC = (props): JSX.Element => {
+  const breakpoints: any = useBreakpoint()
   const showInformational = false
   return (
     <div
@@ -18,7 +20,7 @@ const App: FC = (props): JSX.Element => {
     >
       <div id="viewTop" />
       <Header>
-        <ProgressBar completed={40} />
+        <ProgressBar showSmall={breakpoints.sm} completed={40} />
       </Header>
       <div
         style={{
@@ -27,7 +29,7 @@ const App: FC = (props): JSX.Element => {
           width: '100%',
           flexDirection: 'column',
           position: 'absolute',
-          top: 128,
+          top: breakpoints.sm ? 178 : 128,
         }}
       >
         {!showInformational &&
