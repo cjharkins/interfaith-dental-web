@@ -1,6 +1,8 @@
 import React, { FC } from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Informational from './Informational/Informational'
+import { updateCount } from '../store/ui/actions'
+import { useDispatch } from 'react-redux'
 
 interface ScrollViewProps {
   form: number | undefined
@@ -8,6 +10,8 @@ interface ScrollViewProps {
 }
 
 const ScrollView: FC<ScrollViewProps> = ({ children, count, form }) => {
+  const dispatch = useDispatch()
+
   return (
     <div
       style={{
@@ -29,6 +33,7 @@ const ScrollView: FC<ScrollViewProps> = ({ children, count, form }) => {
           </div>
           <a href={`#view${count}`}>
             <div
+              onClick={(): unknown => dispatch(updateCount(count))}
               style={{
                 width: '116px',
                 height: '78px',

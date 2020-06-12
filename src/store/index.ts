@@ -1,5 +1,7 @@
 import {
   applyMiddleware,
+  ThunkAction,
+  Action,
   createStore,
   combineReducers,
 } from '@reduxjs/toolkit'
@@ -8,17 +10,23 @@ import thunkMiddleware from 'redux-thunk'
 
 import { formReducer } from './form/reducers'
 import { authReducer } from './auth/reducers'
+import { uiReducer } from './ui/reducers'
 
 const rootReducer = combineReducers({
   auth: authReducer,
   form: formReducer,
+  ui: uiReducer,
 })
 
-export default function configureStore() {
-  const store = createStore(
-    rootReducer,
-    composeWithDevTools(applyMiddleware(thunkMiddleware))
-  )
+export const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunkMiddleware))
+)
 
-  return store
-}
+export type RootState = ReturnType<typeof store.getState>
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>
