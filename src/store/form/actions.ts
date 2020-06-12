@@ -1,28 +1,26 @@
 import { FormState, GET_QUESTIONS, POST_ANSWERS } from './types';
 
-export function getQuestions() {
-    fetch('...', {
-        method: 'GET'
-    })
-        .then(res => res.json())
-        .then(response => {
-        return {
-            type: GET_QUESTIONS,
-            payload: response
-        }
-    });
+export const getQuestions = () => async (
+    dispatch: (arg0: {type: string; payload: any}) => void
+) => {
+    try {
+        const questionAPI = await fetch('...', { method: 'GET' });
+        const data = await questionAPI.json();
+        dispatch({ type: GET_QUESTIONS, payload: data })
+    } catch (err) {
+        console.log(err)
+    } 
 };
 
 
-export function postAnswers(formData: FormState) {
-    fetch('...', {
-        method: 'POST'
-    })
-        .then(res => res.json())
-        .then(response => {
-        return {
-            type: POST_ANSWERS,
-            payload: response
-        }
-    });
+export const postAnswers = (formData: FormState) => async (
+    dispatch: (arg0: {type: string; payload: any}) => void
+) => {
+    try {
+        const answerAPI = await fetch('...', { method: 'POST' });
+        const data = await answerAPI.json();
+        dispatch({ type: POST_ANSWERS, payload: data })
+    } catch (err) {
+        console.log(err)
+    } 
 };

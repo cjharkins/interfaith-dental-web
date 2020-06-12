@@ -8,12 +8,10 @@ import thunkMiddleware from 'redux-thunk'
 
 import { formReducer } from './form/reducers'
 import { authReducer } from './auth/reducers'
-import { testReducer } from './test/reducers'
 
 const rootReducer = combineReducers({
   auth: authReducer,
   form: formReducer,
-  test: testReducer,
 })
 
 export default function configureStore() {
