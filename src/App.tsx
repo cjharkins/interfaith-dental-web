@@ -1,54 +1,42 @@
-import React from 'react'
-import logo from './logo.svg'
+import React, { FC } from 'react'
 import './App.css'
+import Header from './components/Header'
+import { ProgressBar } from './components/ProgressBar'
+import ScrolView from './components/ScrollView'
+import Informational from './components/Informational/Informational'
 
-function App() {
+const App: FC = (props): JSX.Element => {
+  const showInformational = false
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <Header>
+        <ProgressBar completed={40} />
+      </Header>
+      <div
+        style={{
+          display: 'flex',
+          height: 'calc(100% - 128px)',
+          width: '100%',
+          flexDirection: 'column',
+          position: 'absolute',
+          top: 128,
+        }}
+      >
+        {!showInformational &&
+          [0, 1, 2, 3].map((form, index) => (
+            <ScrolView key={'n' + index} form={form} count={index} />
+          ))}
+        {showInformational && (
+          <Informational informationType="smileOn60" didQualify={true} />
+        )}
+      </div>
     </div>
   )
 }
