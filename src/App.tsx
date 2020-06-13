@@ -13,8 +13,9 @@ const App: FC = (props): JSX.Element => {
   const showInformational = false
 
   const [completed, setCompleted] = useState<number>(0)
+  const [message, setMessage] = useState<string>('')
 
-  const { questionsComplete = 0, informationType } = useSelector<
+  const { questionsComplete = 0, informationType = '' } = useSelector<
     RootState,
     UIState
   >((state) => state.ui)
@@ -24,7 +25,8 @@ const App: FC = (props): JSX.Element => {
 
   useEffect(() => {
     setCompleted(getPercentage(questionsComplete, 10))
-  }, [questionsComplete])
+    setMessage(message)
+  }, [questionsComplete, informationType])
 
   return (
     <div
