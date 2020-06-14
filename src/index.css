@@ -1,17 +1,49 @@
+@font-face {
+  font-family: 'Aleo Bold';
+  src: url(./assets/fonts/Aleo/Aleo-Bold.ttf);
+}
+@font-face {
+  font-family: 'Aleo Light';
+  src: url(./assets/fonts/Aleo/Aleo-Light.ttf);
+}
+@font-face {
+  font-family: 'Aleo Regular';
+  src: url(./assets/fonts/Aleo/Aleo-Regular.ttf);
+}
+@font-face {
+  font-family: 'OpenSans Bold';
+  src: url(./assets/fonts/Open_Sans/OpenSans-Bold.ttf);
+}
+@font-face {
+  font-family: 'OpenSans Light';
+  src: url(./assets/fonts/Open_Sans/OpenSans-Bold.ttf);
+}
+@font-face {
+  font-family: 'OpenSans Regular';
+  src: url(./assets/fonts/Open_Sans/OpenSans-Regular.ttf);
+}
+
 * {
   transition: all 0.3s ease-in-out;
   scroll-behavior: smooth;
 }
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'OpenSans Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
   padding: 0;
   background: #e5e5e5;
+}
+
+h1 {
+  font-family: 'Aleo Bold';
+}
+h3 {
+  font-family: 'OpenSans Bold';
 }
 
 code {

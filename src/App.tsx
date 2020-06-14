@@ -37,6 +37,7 @@ const App: FC = (props): JSX.Element => {
         height: '100%',
       }}
     >
+      <div id="viewTop" />
       <Header>
         <ProgressBar completed={completed} />
       </Header>

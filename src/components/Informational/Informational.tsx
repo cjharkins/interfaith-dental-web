@@ -47,7 +47,7 @@ const Informational: FC<InformationalProps> = ({
               </div>
             </a>
           </div>
-            <div id={`view0`}></div>
+          <div id={`view0`}></div>
         </div>
       )
     case 'oralHealth':
@@ -159,17 +159,21 @@ const Welcome: FC = () => {
   return (
     <div>
       <div style={{ textAlign: 'center' }}>
-        <h1>Welcome</h1>
+        <h1 style={{ fontSize: 72 }}>Welcome</h1>
       </div>
-      <div>
-        <p>Welcome to Interfaith Dental’s Patient Screening Form. </p>
-        <p>
+      <div style={{ fontSize: 18 }}>
+        <p style={{ padding: '10px 0' }}>
+          Welcome to Interfaith Dental’s Patient Screening Form.{' '}
+        </p>
+        <p style={{ padding: '10px 0' }}>
           This form will help determine whether you or your family member(s)
           qualify for Interfaith Dental’s services as well as inform us of your
           dental needs.
         </p>
-        <p>It should take approximately 10 minutes to complete.</p>
-        <p>
+        <p style={{ padding: '10px 0' }}>
+          It should take approximately 10 minutes to complete.
+        </p>
+        <p style={{ padding: '10px 0' }}>
           If you have any questions or concerns, please call our main office
           number at (615) 329-4790. Thank you!
         </p>
