@@ -1,12 +1,33 @@
-import React, { FC } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 import './App.css'
 import Header from './components/Header'
 import { ProgressBar } from './components/ProgressBar'
 import ScrolView from './components/ScrollView'
 import Informational from './components/Informational/Informational'
+import { useSelector } from 'react-redux'
+import { UIState } from './store/ui/types'
+import { RootState } from './store/index'
+import { get } from 'http'
 
 const App: FC = (props): JSX.Element => {
   const showInformational = false
+
+  const [completed, setCompleted] = useState<number>(0)
+  const [message, setMessage] = useState<string>('')
+
+  const { questionsComplete = 0, informationType = '' } = useSelector<
+    RootState,
+    UIState
+  >((state) => state.ui)
+
+  const getPercentage = (numCompleted: number, total: number) =>
+    Math.ceil((numCompleted / total) * 100)
+
+  useEffect(() => {
+    setCompleted(getPercentage(questionsComplete, 10))
+    setMessage(message)
+  }, [questionsComplete, informationType])
+
   return (
     <div
       style={{
@@ -18,7 +39,7 @@ const App: FC = (props): JSX.Element => {
     >
       <div id="viewTop" />
       <Header>
-        <ProgressBar completed={40} />
+        <ProgressBar completed={completed} />
       </Header>
       <div
         style={{
@@ -31,7 +52,7 @@ const App: FC = (props): JSX.Element => {
         }}
       >
         {!showInformational &&
-          [0, 1, 2, 3].map((form, index) => (
+          [...Array(11).keys()].map((form, index) => (
             <ScrolView key={'n' + index} form={form} count={index} />
           ))}
         {showInformational && (
