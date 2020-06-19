@@ -14,11 +14,9 @@ const ScrollView: FC<ScrollViewProps> = ({ children, count = 0 }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
 
-  const [valid, setValid] = useState<boolean>(true)
+  // const [valid, setValid] = useState<boolean>(true)
 
   const scrollRef = useRef<HTMLDivElement>(null)
-
-
 
   // useEffect(() => {
   //   const bounds =
@@ -79,11 +77,12 @@ const ScrollView: FC<ScrollViewProps> = ({ children, count = 0 }) => {
         </div>
         <a
           style={{ textDecoration: 'none' }}
-          href={valid ? `#view${count}` : `#view${count - 1}`}
+          // href={valid ? `#view${count}` : `#view${count - 1}`}
+          href={`#view${count}`}
         >
           <div
             onClick={(): unknown => {
-              setValid(false)
+              // setValid(false)
               dispatch(updateCount(count))
               return
             }}
