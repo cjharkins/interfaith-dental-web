@@ -23,7 +23,13 @@ const Informational: FC<InformationalProps> = ({
       )
     case 'welcome':
       return (
-        <div style={{ width: '100%', height: '100%', padding: breakpoints.sm ? '0 0 30px' : '0', }}>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            padding: breakpoints.sm ? '0 0 178px' : '0 0 128px',
+          }}
+        >
           <Container>
             <Welcome />
           </Container>
@@ -84,7 +90,7 @@ const Container: FC = ({ children }) => {
     <div
       style={{
         display: 'flex',
-        height: breakpoints.sm ? 'calc(100% - 128px)' : 648,
+        height: breakpoints.sm ? 'calc(100% - 78px)' : 648,
         background: '#003B49',
         padding: 15,
         flexDirection: 'column',
