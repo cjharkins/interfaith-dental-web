@@ -2,18 +2,18 @@ import React, { FC, useState } from 'react'
 
 interface ProgressBarProps {
   completed: number | undefined
+  showSmall: boolean | undefined
 }
 
-export const ProgressBar: FC<ProgressBarProps> = ({ completed }) => {
+export const ProgressBar: FC<ProgressBarProps> = ({ completed, showSmall }) => {
   return (
     <div
       style={{
-        flex: '1 1 522px',
-        maxWidth: '522px',
-        marginRight: '30px',
+        width: '90%',
         display: 'flex',
         justifyContent: 'space-between',
         alignContent: 'center',
+        padding: showSmall ? '20px 0' : '0px 30px 0 0',
       }}
     >
       <div style={{ marginRight: 5, color: '#545859' }}>PROGRESS</div>

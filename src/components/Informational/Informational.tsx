@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { Button } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { useBreakpoint } from '../MediaBreakpointProvider'
 
 interface InformationalProps {
   informationType: string | undefined
@@ -12,6 +13,7 @@ const Informational: FC<InformationalProps> = ({
   informationType,
   didQualify = false,
 }) => {
+  const breakpoints: any = useBreakpoint()
   switch (informationType) {
     case 'smileOn60':
       return (
@@ -21,11 +23,22 @@ const Informational: FC<InformationalProps> = ({
       )
     case 'welcome':
       return (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            padding: breakpoints.sm ? '0 0 178px' : '0 0 128px',
+          }}
+        >
           <Container>
             <Welcome />
           </Container>
-          <div style={{ margin: '0 auto', width: 'max-content' }}>
+          <div
+            style={{
+              margin: '0 auto',
+              width: 'max-content',
+            }}
+          >
             <a href={`#view0`}>
               <div
                 style={{
@@ -72,11 +85,12 @@ const Informational: FC<InformationalProps> = ({
 }
 
 const Container: FC = ({ children }) => {
+  const breakpoints: any = useBreakpoint()
   return (
     <div
       style={{
         display: 'flex',
-        height: 648,
+        height: breakpoints.sm ? 'calc(100% - 78px)' : 648,
         background: '#003B49',
         padding: 15,
         flexDirection: 'column',
@@ -102,7 +116,7 @@ const Container: FC = ({ children }) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          width: 700,
+          width: breakpoints.sm ? '100%' : 700,
           margin: '0 auto',
           color: 'white',
         }}
@@ -156,24 +170,40 @@ const SmileOn60: FC = () => {
 }
 
 const Welcome: FC = () => {
+  const breakpoints: any = useBreakpoint()
+  const padding = breakpoints.sm ? 0 : '10px 0'
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        height: '100%',
+      }}
+    >
       <div style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: 72 }}>Welcome</h1>
+        <h1
+          style={{
+            fontSize: breakpoints.sm ? 36 : 72,
+            margin: breakpoints.sm ? 0 : '15px 0',
+          }}
+        >
+          Welcome
+        </h1>
       </div>
-      <div style={{ fontSize: 18 }}>
-        <p style={{ padding: '10px 0' }}>
+      <div style={{ fontSize: breakpoints.sm ? 16 : 18 }}>
+        <p style={{ padding: padding }}>
           Welcome to Interfaith Dental’s Patient Screening Form.{' '}
         </p>
-        <p style={{ padding: '10px 0' }}>
+        <p style={{ padding: padding }}>
           This form will help determine whether you or your family member(s)
           qualify for Interfaith Dental’s services as well as inform us of your
           dental needs.
         </p>
-        <p style={{ padding: '10px 0' }}>
+        <p style={{ padding: padding }}>
           It should take approximately 10 minutes to complete.
         </p>
-        <p style={{ padding: '10px 0' }}>
+        <p style={{ padding: padding }}>
           If you have any questions or concerns, please call our main office
           number at (615) 329-4790. Thank you!
         </p>

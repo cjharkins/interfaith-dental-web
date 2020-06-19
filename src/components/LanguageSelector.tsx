@@ -2,11 +2,15 @@ import React, { FC, useState } from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 
-export const LanguageSelector: FC = () => {
+interface LanguageSelectorProps {
+  style?: object | undefined
+}
+
+export const LanguageSelector: FC<LanguageSelectorProps> = ({ style }) => {
   const currentOptions = [
-    <span>English</span>,
-    <span>Espa&ntilde;ol</span>,
-    <span>Arabic</span>,
+    <span key={'English'}>English</span>,
+    <span key={'Espanol'}>Espa&ntilde;ol</span>,
+    <span key={'Arabic'}>Arabic</span>,
   ]
   const [showOptions, setShowOptions] = useState(false)
   const [selectedOption, setSelectedOption] = useState('English')
@@ -14,6 +18,7 @@ export const LanguageSelector: FC = () => {
   return (
     <div
       style={{
+        ...style,
         position: 'relative',
       }}
     >
@@ -38,6 +43,7 @@ export const LanguageSelector: FC = () => {
           background: '#EAE7DD',
           boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
           width: 100,
+          zIndex: 9999,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
