@@ -1,6 +1,7 @@
 {
   "name": "interfaith-dental-web",
   "version": "0.1.0",
+  "homepage": "http://interfaithpatient.com",
   "private": true,
   "license": "LicenseRef-LICENSE",
   "contributors": [
