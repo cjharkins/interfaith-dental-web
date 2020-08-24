@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import Logo from './Logo'
 import { LanguageSelector } from './LanguageSelector'
-import { LoginButton } from './LoginButton'
+import { LoginDialogue } from './LoginDialogue'
 import { useBreakpoint } from './MediaBreakpointProvider'
 
 const Header: FC = ({ children }) => {
@@ -34,7 +34,7 @@ const Header: FC = ({ children }) => {
         }}
       >
         <Logo showSmall={breakpoints.sm} />
-        <LoginButton />
+        <LoginDialogue />
         <LanguageSelector style={{ order: 2 }} />
       </div>
       {children}

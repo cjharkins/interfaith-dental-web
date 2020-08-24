@@ -7,13 +7,18 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core'
+import { useDispatch } from 'react-redux'
+import { adminLogin } from '../store/auth/actions'
 
-interface LoginButtonProps {
+interface LoginDialogueProps {
   style?: object | undefined
 }
 
-export const LoginButton: FC<LoginButtonProps> = ({ style }) => {
+export const LoginDialogue: FC<LoginDialogueProps> = ({ style }) => {
   const [showLogin, setShowLogin] = useState(false)
+  const [user, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
 
   return (
     <div>
@@ -51,6 +56,7 @@ export const LoginButton: FC<LoginButtonProps> = ({ style }) => {
               label="Admin Username"
               type="text"
               fullWidth
+              onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
               margin="dense"
@@ -58,11 +64,19 @@ export const LoginButton: FC<LoginButtonProps> = ({ style }) => {
               label="Password"
               type="password"
               fullWidth
+              onChange={(e) => setPassword(e.target.value)}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setShowLogin(false)}>Cancel</Button>
-            <Button onClick={() => setShowLogin(false)}>Login</Button>
+            <Button
+              onClick={(): unknown => {
+                dispatch(adminLogin({ user, password }))
+                return
+              }}
+            >
+              Login
+            </Button>
           </DialogActions>
         </Dialog>
       </div>
