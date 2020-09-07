@@ -2,8 +2,7 @@ import React, { FC, useState, useEffect } from 'react'
 import './App.css'
 import Header from './components/Header'
 import { ProgressBar } from './components/ProgressBar'
-import ScrollView from './components/ScrollView'
-import Form from './components/Forms/Form'
+import Form from './components/Form'
 import Informational from './components/Informational/Informational'
 import { useBreakpoint } from './components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
@@ -40,16 +39,13 @@ const App: FC = (props): JSX.Element => {
       didQualify={false}
     />,
     ...questions.map((question) => (
-      <ScrollView
+      <Form
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
-      >
-        <Form
-          answerChoices={question.answerChoices}
-          questionText={question.questionText}
-          questionType={question.questionType}
-        />
-      </ScrollView>
+        answerChoices={question.answerChoices}
+        questionText={question.questionText}
+        questionType={question.questionType}
+      />
     )),
   ]
 

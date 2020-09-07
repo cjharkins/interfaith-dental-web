@@ -1,4 +1,4 @@
-import { FormState, GET_QUESTIONS, POST_ANSWERS } from './types'
+import { FormState, GET_QUESTIONS, ADD_ANSWERS_TO_ARRAY, CustomerAnswers } from './types'
 const serverUrl =
   'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'
 
@@ -36,10 +36,15 @@ export const postAnswers = (formData: FormState) => async (
       },
     })
     const data = await answerAPI.json()
-    dispatch({ type: POST_ANSWERS, payload: data })
   } catch (err) {
     console.log(err)
   } finally {
     return
   }
+}
+export const addAnswersToArray = (questionData: CustomerAnswers) => async (
+  dispatch: (arg0: { type: string; payload: any }) => void
+) => {
+  console.log(questionData)
+  dispatch({type: ADD_ANSWERS_TO_ARRAY, payload: questionData})
 }

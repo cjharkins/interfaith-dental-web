@@ -1,7 +1,7 @@
 import {
   FormState,
   GET_QUESTIONS,
-  POST_ANSWERS,
+  ADD_ANSWERS_TO_ARRAY,
   FormActionTypes,
 } from './types'
 
@@ -20,7 +20,7 @@ export function formReducer(
         ...state,
         ...payload,
       }
-    case POST_ANSWERS:
+    case ADD_ANSWERS_TO_ARRAY:
       return {
         ...state,
         ...payload,
