@@ -1,6 +1,7 @@
 {
   "name": "interfaith-dental-web",
   "version": "0.1.0",
+  "homepage": "http://www.interfaithpatient.com",
   "private": true,
   "license": "LicenseRef-LICENSE",
   "contributors": [
@@ -62,7 +63,8 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.16.0",
     "fork-ts-checker-webpack-plugin": "^4.0.4",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.1",
+    "pretty-quick": "^3.0.0",
     "react-docgen-typescript-loader": "^3.6.0",
     "react-is": "^16.12.0",
     "ts-loader": "^6.2.1"
