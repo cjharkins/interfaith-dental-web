@@ -14,31 +14,7 @@ const ScrollView: FC<ScrollViewProps> = ({ children, count = 0 }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
 
-  // const [valid, setValid] = useState<boolean>(true)
-
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  // useEffect(() => {
-  //   const bounds =
-  //     scrollRef &&
-  //     scrollRef.current &&
-  //     scrollRef.current.getBoundingClientRect()
-  //   if (!valid) {
-  //     const x = bounds && bounds.x
-  //     const y = bounds && bounds.y + 178
-  //     if (x !== null && y !== null) {
-  //       window.onscroll = function () {
-  //         window.scrollTo(x, y)
-  //       }
-  //     }
-  //     console.log(
-  //       scrollRef &&
-  //         scrollRef.current &&
-  //         scrollRef.current.getBoundingClientRect(),
-  //       count
-  //     )
-  //   }
-  // }, [valid])
 
   return (
     <div
@@ -66,8 +42,6 @@ const ScrollView: FC<ScrollViewProps> = ({ children, count = 0 }) => {
           <div
             style={{
               width: breakpoints.sm ? '100%' : 700,
-              // height: breakpoints.sm ? '478px' : '685px',
-              // maxHeight: breakpoints.sm ? '578px' : '685px',
               background: 'white',
             }}
           >

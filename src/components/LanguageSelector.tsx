@@ -1,9 +1,8 @@
 import React, { FC, useState, useEffect } from 'react'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import {getQuestions} from '../store/form/actions'
-import {useDispatch} from 'react-redux'
-
+import { getQuestions } from '../store/form/actions'
+import { useDispatch } from 'react-redux'
 
 interface LanguageSelectorProps {
   style?: object | undefined
@@ -19,10 +18,11 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({ style }) => {
   ]
   const [showOptions, setShowOptions] = useState(false)
   const [selectedOption, setSelectedOption] = useState('English')
-useEffect(() =>{
- dispatch(getQuestions())
-console.log("WTF")
-}, [selectedOption])
+
+  useEffect(() => {
+    dispatch(getQuestions())
+      console.log('fired api call')
+  }, [selectedOption])
 
   return (
     <div

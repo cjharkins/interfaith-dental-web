@@ -17,15 +17,15 @@ const queries = {
 }
 
 ReactDOM.render(
-  <React.StrictMode>
-    <MediaBreakpointProvider queries={queries}>
-      <ThemeProvider>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </ThemeProvider>
-    </MediaBreakpointProvider>
-  </React.StrictMode>,
+  // <React.StrictMode>
+  <MediaBreakpointProvider queries={queries}>
+    <ThemeProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ThemeProvider>
+  </MediaBreakpointProvider>,
+  // </React.StrictMode>,
   document.getElementById('root')
 )
 

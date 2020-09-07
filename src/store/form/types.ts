@@ -3,7 +3,10 @@ interface Answer {
 }
 
 interface Question {
-  answer: string
+  answerChoices: [] | undefined
+  questionDisplayOrder: number | undefined
+  questionText: string | undefined
+  questionType: string | undefined
 }
 
 export interface FormState {

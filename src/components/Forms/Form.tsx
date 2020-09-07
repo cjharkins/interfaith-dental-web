@@ -1,19 +1,51 @@
-import React, { FC, useState } from 'react'
-import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import React, { FC, useEffect, useState } from 'react'
 import { useBreakpoint } from '../MediaBreakpointProvider'
-import { Button, ButtonGroup, Checkbox, TextField } from '@material-ui/core'
+import {
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@material-ui/core'
 
-const Form: FC = () => {
-  const [count, setCount] = useState<number>(1)
+interface FormProps {
+  answerChoices: [] | undefined
+  questionText: string | undefined
+  questionType: string | undefined
+}
+
+const Form: FC<FormProps> = ({ answerChoices, questionText, questionType }) => {
+  const [checked, setChecked] = useState<string>('')
+  const [answerSelected, setAnswerSelected] = useState<string>('')
   const breakpoints: any = useBreakpoint()
+  const [answersSelected, setAnswersSelected] = useState<string[]>([])
+
+  useEffect(() => {
+    console.log('dispatch checked with selection of ' + checked)
+  }, [checked])
+
+  const handleChangeMultiple = (event: any) => {
+    const { value } = event.target
+    if (answersSelected.some((answer) => answer === value)) {
+      return
+    } else {
+      return setAnswersSelected(value)
+    }
+  }
+  const handleChange = (event: any) => {
+    const { value } = event.target
+    return setAnswerSelected(value)
+  }
+
+  useEffect(() => console.log(answerSelected), [answerSelected])
+  useEffect(() => console.log(answersSelected), [answersSelected])
+
   return (
     <div
       style={{
-        height: 'max-content',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingBottom: 30,
       }}
     >
       <div
@@ -24,126 +56,91 @@ const Form: FC = () => {
         }}
       >
         <p style={{ fontSize: breakpoints.sm ? '1.5em' : 36 }}>
-          {"Please enter the patient's information."}
+          {questionText}
         </p>
-        <div style={{ width: '100%', fontSize: 14 }}>
-          <p style={{ fontSize: 16 }}>Personal Information</p>
-          <form noValidate autoComplete="off">
-            <TextField
-              style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-            />
-            <TextField
-              style={{ width: '80%', maxWidth: 400 }}
-              id="outlined-basic"
-              label="Age"
-              variant="outlined"
-            />
-            <div style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}>
-              <Checkbox
-                onChange={() => alert('dispatching smile over 60 view')}
-                color="primary"
-                inputProps={{ 'aria-label': 'secondary checkbox' }}
-              />
-              Check if aged 60 or above
-            </div>
-            <p style={{ fontSize: 16 }}>
-              Number of people including patient wanting care in household
-            </p>
-            <ButtonGroup
-              color="primary"
-              aria-label="outlined primary button group"
+        {questionType === 'freeText' && (
+          <TextField
+            style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
+            id="outlined-basic"
+            label={questionText}
+            variant="outlined"
+          />
+        )}
+        {questionType === 'singleSelect' && (
+          <div style={{ width: '100%', fontSize: 14 }}>
+            {answerChoices !== undefined &&
+              // answerChoices.length > 0 &&
+              ['answerChoices', 'answer 1', 'answer 2'].map((val, index) => {
+                return (
+                  <div
+                    key={val}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignContent: 'center',
+                      borderTop: '1px solid lightgrey',
+                      borderBottom:
+                        val === 'Case Worker' ? '1px solid lightgrey' : 'none',
+                      width: '100%',
+                      padding: '15px 0',
+                    }}
+                  >
+                    <input
+                      type="radio"
+                      onChange={() => setChecked(val)}
+                      checked={checked === val}
+                    />{' '}
+                    {val}
+                  </div>
+                )
+              })}
+          </div>
+        )}
+        {questionType === 'dropDown' && (
+          <div style={{ width: '100%', fontSize: 14 }}>
+            <InputLabel id="demo-simple-select-label">
+              {questionText}
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={90}
+              onChange={handleChange}
+              style={{ width: 400 }}
             >
-              <Button
-                onClick={(e) => {
-                  e.preventDefault()
-                  if (count === 1) return
-                  const subtractFromCount = count - 1
-                  setCount(subtractFromCount)
-                }}
-              >
-                -
-              </Button>
-              <Button>{count}</Button>
-              <Button
-                onClick={(e) => {
-                  e.preventDefault()
-                  const addToCount = count + 1
-                  setCount(addToCount)
-                }}
-              >
-                +
-              </Button>
-            </ButtonGroup>
-          </form>
-        </div>
-      </div>
-      {/*{ DELETE BELOW }*/}
-      <div
-        style={{
-          width: breakpoints.sm ? '100%' : 700,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <p style={{ fontSize: breakpoints.sm ? '1.5em' : 36 }}>
-          {"Please enter the patient's information."}
-        </p>
-        <div style={{ width: '100%', fontSize: 14 }}>
-          <p style={{ fontSize: 16 }}>Personal Information</p>
-          <form noValidate autoComplete="off">
-            <TextField
-              style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-            />
-            <TextField
-              style={{ width: '80%', maxWidth: 400 }}
-              id="outlined-basic"
-              label="Age"
-              variant="outlined"
-            />
-            <div style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}>
-              <Checkbox
-                onChange={() => alert('dispatching smile over 60 view')}
-                color="primary"
-                inputProps={{ 'aria-label': 'secondary checkbox' }}
-              />
-              Check if aged 60 or above
-            </div>
-            <p style={{ fontSize: 16 }}>
-              Number of people including patient wanting care in household
-            </p>
-            <ButtonGroup
-              color="primary"
-              aria-label="outlined primary button group"
+              {answerChoices !== undefined &&
+                // answerChoices.length > 0 &&
+                ['answerChoices', 'answer 1', 'answer 2'].map((val, index) => (
+                  <MenuItem key={val} value={val}>
+                    {val}
+                  </MenuItem>
+                ))}
+            </Select>
+          </div>
+        )}
+        {questionType === 'multipleSelect' && (
+          <div style={{ width: '100%', fontSize: 14 }}>
+            <InputLabel id={questionText}>{questionText}</InputLabel>
+            <Select
+              labelId={questionText}
+              id={questionText}
+              multiple
+              value={answersSelected}
+              onChange={handleChangeMultiple}
+              input={<Input />}
+              style={{ width: 400 }}
             >
-              <Button
-                onClick={(e) => {
-                  e.preventDefault()
-                  if (count === 1) return
-                  const subtractFromCount = count - 1
-                  setCount(subtractFromCount)
-                }}
-              >
-                -
-              </Button>
-              <Button>{count}</Button>
-              <Button
-                onClick={(e) => {
-                  e.preventDefault()
-                  const addToCount = count + 1
-                  setCount(addToCount)
-                }}
-              >
-                +
-              </Button>
-            </ButtonGroup>
-          </form>
-        </div>
+              {['option 1', 'option 2', 'option 3'].map((val, index) => {
+                return (
+                  <MenuItem key={val} value={val}>
+                    {val}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </div>
+        )}
       </div>
     </div>
   )
