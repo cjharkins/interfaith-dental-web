@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import Logo from './Logo'
 import { LanguageSelector } from './LanguageSelector'
-import { LoginDialogue } from './LoginDialogue'
+import LoginDialogue from './LoginDialogue'
 import { useBreakpoint } from './MediaBreakpointProvider'
 
 const Header: FC = ({ children }) => {

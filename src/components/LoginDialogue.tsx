@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import {
   DialogTitle,
@@ -7,7 +7,7 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 import { adminLogin } from '../store/auth/actions'
 
 interface LoginDialogueProps {
@@ -17,8 +17,12 @@ interface LoginDialogueProps {
 export const LoginDialogue: FC<LoginDialogueProps> = ({ style }) => {
   const [showLogin, setShowLogin] = useState(false)
   const [user, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const dispatch = useDispatch()
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+
+  const handleAdminLogin = () => {
+    dispatch(adminLogin({ user, password }));
+  }
 
   return (
     <div>
@@ -70,10 +74,7 @@ export const LoginDialogue: FC<LoginDialogueProps> = ({ style }) => {
           <DialogActions>
             <Button onClick={() => setShowLogin(false)}>Cancel</Button>
             <Button
-              onClick={(): unknown => {
-                dispatch(adminLogin({ user, password }))
-                return
-              }}
+              onClick={() => handleAdminLogin()}
             >
               Login
             </Button>
@@ -83,3 +84,9 @@ export const LoginDialogue: FC<LoginDialogueProps> = ({ style }) => {
     </div>
   )
 }
+
+const mapStateToProps = (state : any) => {
+  return { auth: state.auth }
+}
+
+export default connect(mapStateToProps)(LoginDialogue)

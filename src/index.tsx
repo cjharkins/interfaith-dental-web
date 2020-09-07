@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'
 import { ThemeProvider } from './ThemeContext'
 import { MediaBreakpointProvider } from './components/MediaBreakpointProvider'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 
 const queries = {
   xs: '(max-width: 320px)',

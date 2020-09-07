@@ -16,33 +16,29 @@ const initialState: AuthState = {
 
 export function authReducer(
   state = initialState,
-  action: AuthActionTypes
+  { payload, type }: AuthActionTypes
 ): AuthState {
-  switch (action.type) {
-    case ADMIN_LOGIN: {
+  switch (type) {
+    case ADMIN_LOGIN:
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       }
-    }
-    case ADMIN_LOGOUT: {
+    case ADMIN_LOGOUT: 
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       }
-    }
-    case ADMIN_LOGIN_ERROR: {
+    case ADMIN_LOGIN_ERROR:
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       }
-    }
-    case ADMIN_LOGOUT_ERROR: {
+    case ADMIN_LOGOUT_ERROR:
       return {
         ...state,
-        ...action.payload,
+        ...payload,
       }
-    }
     default:
       return state
   }
