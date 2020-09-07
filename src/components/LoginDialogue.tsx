@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
+import { makeStyles, Theme, createStyles } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog'
 import {
   DialogTitle,
@@ -7,17 +8,30 @@ import {
   DialogActions,
   Button,
 } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert';
 import { useDispatch, connect } from 'react-redux'
 import { adminLogin } from '../store/auth/actions'
+import { AuthState } from '../store/auth/types';
 
 interface LoginDialogueProps {
   style?: object | undefined
+  auth?: AuthState | undefined
+  className?: string | undefined
 }
 
-export const LoginDialogue: FC<LoginDialogueProps> = ({ style }) => {
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    alert: {
+      margin: ".5em 0"
+    }
+  })
+);
+
+export const LoginDialogue: FC<LoginDialogueProps> = ({ auth, style = {} }) => {
+  const classes = useStyles();
   const [showLogin, setShowLogin] = useState(false)
   const [user, setUsername] = useState('')
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('')
   const dispatch = useDispatch();
 
   const handleAdminLogin = () => {
@@ -70,7 +84,9 @@ export const LoginDialogue: FC<LoginDialogueProps> = ({ style }) => {
               fullWidth
               onChange={(e) => setPassword(e.target.value)}
             />
+            {auth && auth.isError ? <Alert className={classes.alert} severity="error">{auth.error}</Alert> : <></> }
           </DialogContent>
+          
           <DialogActions>
             <Button onClick={() => setShowLogin(false)}>Cancel</Button>
             <Button
