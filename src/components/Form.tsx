@@ -16,9 +16,15 @@ import { useBreakpoint } from './MediaBreakpointProvider'
 
 export interface ScrollViewProps {
   count?: number | undefined
-  answerChoices: string [] | undefined
+  answerChoices: AnswerObjectProps [] | undefined
   questionText: string | undefined
   questionType: string | undefined
+}
+interface AnswerObjectProps {
+  answerText: string 
+   answerType: string
+    answerDisplayOrder: string
+     questionDisplayOrder: string
 }
 
 const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, count = 0 }) => {
@@ -28,7 +34,7 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
   const [checked, setChecked] = useState<string>('')
   const [answerSelected, setAnswerSelected] = useState<string>('')
   const [answersSelected, setAnswersSelected] = useState<string[]>([])
-  
+  console.log(answerChoices, 'Answerssssss')
   const handleChangeMultiple = (event: any) => {
     const { value } = event.target
     if (answersSelected.some((answer) => answer === value)) {
@@ -111,11 +117,10 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
         {questionType === 'singleSelect' && (
           <div style={{ width: '100%', fontSize: 14 }}>
             {answerChoices !== undefined &&
-              // answerChoices.length > 0 &&
-              ['answerChoices', 'answer 1', 'answer 2'].map((val, index) => {
+                answerChoices.length > 0 && answerChoices.map(({answerText, answerType, answerDisplayOrder, questionDisplayOrder}) => {
                 return (
                   <div
-                    key={val}
+                    key={answerText}
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
@@ -123,17 +128,17 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
                       alignContent: 'center',
                       borderTop: '1px solid lightgrey',
                       borderBottom:
-                        val === 'Case Worker' ? '1px solid lightgrey' : 'none',
+                        answerText === 'Case Worker' ? '1px solid lightgrey' : 'none',
                       width: '100%',
                       padding: '15px 0',
                     }}
                   >
                     <input
                       type="radio"
-                      onChange={() => setChecked(val)}
-                      checked={checked === val}
+                      onChange={() => setChecked(answerText)}
+                      checked={checked === answerText}
                     />{' '}
-                    {val}
+                    {answerText}
                   </div>
                 )
               })}
