@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert';
 import { useDispatch, connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { adminLogin } from '../store/auth/actions'
 import { AuthState } from '../store/auth/types';
 
@@ -27,19 +28,24 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export const LoginDialogue: FC<LoginDialogueProps> = ({ auth, style = {} }) => {
+export const LoginDialogue: FC<LoginDialogueProps> = ({ auth = {}, style = {} }) => {
   const classes = useStyles();
   const [showLogin, setShowLogin] = useState(false)
   const [user, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch();
+  let content;
 
   const handleAdminLogin = () => {
     dispatch(adminLogin({ user, password }));
   }
 
-  return (
-    <div>
+  // https://github.com/babel/babel/issues/8837
+  // Unable to use ternary operators
+  if (auth.loggedIn) {
+    content = <Redirect to="/admin" /> 
+  } else {
+    content = <div>
       <div
         style={{
           ...style,
@@ -98,7 +104,11 @@ export const LoginDialogue: FC<LoginDialogueProps> = ({ auth, style = {} }) => {
         </Dialog>
       </div>
     </div>
-  )
+  }
+  
+    return (
+      <div>{content}</div>
+    );
 }
 
 const mapStateToProps = (state : any) => {

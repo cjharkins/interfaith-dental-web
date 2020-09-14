@@ -29,6 +29,16 @@ export const adminLogin = (loginData: LoginData) => async (
       type: ADMIN_LOGIN_ERROR,
       payload: { isError: true, error: 'No such user' },
     })
+  } else if (password !== "pwd!!!1") {
+    dispatch({
+      type: ADMIN_LOGIN_ERROR,
+      payload: { isError: true, error: 'Incorrect password' }
+    })
+  } else {
+    dispatch({
+      type: ADMIN_LOGIN,
+      payload: { loggedIn: true, token: '123abc'}
+    })
   }
 }
 
