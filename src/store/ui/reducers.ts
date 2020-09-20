@@ -21,6 +21,7 @@ export function uiReducer(
         questionsComplete: payload,
       }
     case INFORMATION:
+    console.log(payload)
       return {
         ...state,
         informationType: payload,

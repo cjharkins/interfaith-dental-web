@@ -1,11 +1,17 @@
 import {ScrollViewProps} from '../../components/Form'
 
 export interface CustomerAnswers extends ScrollViewProps {
-  selectedAnswer: string | string [] | undefined
+  answerSelected: string | string [] | undefined
 }
 
+export interface AnswerObjectProps {
+  answerText: string 
+   answerType: string
+    answerDisplayOrder: string
+     questionDisplayOrder: string
+}
 interface Question {
-  answerChoices: [] | undefined
+  answerChoices: AnswerObjectProps[] | undefined
   questionDisplayOrder: number | undefined
   questionText: string | undefined
   questionType: string | undefined

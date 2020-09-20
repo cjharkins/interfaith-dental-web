@@ -17,7 +17,7 @@ const App: FC = (props): JSX.Element => {
   const [completed, setCompleted] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
 
-  const { questionsComplete = 0, informationType = '' } = useSelector<
+  const { questionsComplete = 0, informationType } = useSelector<
     RootState,
     UIState
   >((state) => state.ui)
@@ -34,11 +34,11 @@ const App: FC = (props): JSX.Element => {
 
   const questionsAsComponents = [
     <Informational
-      key={'welcome'}
-      informationType="welcome"
+      key={informationType}
+      informationType={informationType}
       didQualify={false}
     />,
-    ...questions.map((question) => (
+      ...questions.map((question) => (
       <Form
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}

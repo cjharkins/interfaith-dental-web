@@ -6,25 +6,20 @@ import {
   Select,
   TextField,
 } from '@material-ui/core'
+import {AnswerObjectProps} from '../store/form/types'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import Informational from './Informational/Informational'
-import { updateCount } from '../store/ui/actions'
+import { updateCount, updateMessage } from '../store/ui/actions'
 import {addAnswersToArray} from '../store/form/actions'
 import { useDispatch } from 'react-redux'
 import { useBreakpoint } from './MediaBreakpointProvider'
 
 export interface ScrollViewProps {
   count?: number | undefined
-  answerChoices: AnswerObjectProps [] | undefined
+  answerChoices:AnswerObjectProps  [] | undefined
   questionText: string | undefined
   questionType: string | undefined
-}
-interface AnswerObjectProps {
-  answerText: string 
-   answerType: string
-    answerDisplayOrder: string
-     questionDisplayOrder: string
 }
 
 const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, count = 0 }) => {
@@ -34,7 +29,6 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
   const [checked, setChecked] = useState<string>('')
   const [answerSelected, setAnswerSelected] = useState<string>('')
   const [answersSelected, setAnswersSelected] = useState<string[]>([])
-  console.log(answerChoices, 'Answerssssss')
   const handleChangeMultiple = (event: any) => {
     const { value } = event.target
     if (answersSelected.some((answer) => answer === value)) {
@@ -109,8 +103,8 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
           <TextField
             style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
             id="outlined-basic"
-            label={questionText}
             variant="outlined"
+            label={'Please enter your answer here.'}
             onChange={handleChange}
           />
         )}
@@ -146,8 +140,8 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
         )}
         {questionType === 'dropDown' && (
           <div style={{ width: '100%', fontSize: 14 }}>
-            <InputLabel id="demo-simple-select-label">
-              {questionText}
+          <InputLabel id="demo-simple-select-label">
+              Please Select One
             </InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -157,10 +151,9 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
               style={{ width: 400 }}
             >
               {answerChoices !== undefined &&
-                // answerChoices.length > 0 &&
-                ['answerChoices', 'answer 1', 'answer 2'].map((val, index) => (
-                  <MenuItem key={val} value={val}>
-                    {val}
+                 answerChoices.length > 0 && answerChoices.map(({answerText, answerType, answerDisplayOrder, questionDisplayOrder}) => (
+                  <MenuItem key={answerText} value={answerText}>
+                    {answerText}
                   </MenuItem>
                 ))}
             </Select>
@@ -168,7 +161,6 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
         )}
         {questionType === 'multipleSelect' && (
           <div style={{ width: '100%', fontSize: 14 }}>
-            <InputLabel id={questionText}>{questionText}</InputLabel>
             <Select
               labelId={questionText}
               id={questionText}
@@ -178,10 +170,11 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
               input={<Input />}
               style={{ width: 400 }}
             >
-              {['option 1', 'option 2', 'option 3'].map((val, index) => {
+              {answerChoices !== undefined &&
+                 answerChoices.length > 0 && answerChoices.map(({answerText, answerType, answerDisplayOrder, questionDisplayOrder}) => {
                 return (
-                  <MenuItem key={val} value={val}>
-                    {val}
+                  <MenuItem key={answerText} value={answerText}>
+                    {answerText}
                   </MenuItem>
                 )
               })}
@@ -202,7 +195,13 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
             onClick={(): unknown => {
               // setValid(false)
               //Validate if question has been answered 
-              dispatch(addAnswersToArray({answerChoices, questionText, questionType, selectedAnswer: 'Boop'}))
+              console.log(questionText, answerSelected)
+              if(questionText && questionText.toLowerCase() === 'age:' && answerSelected === '60+') {
+                console.log("IFFFFFFFF")
+                //flush question array
+                dispatch(updateMessage( 'smileOn60'))
+              }
+              dispatch(addAnswersToArray({answerChoices, questionText, questionType, answerSelected}))
               dispatch(updateCount(count))
               return
             }}
