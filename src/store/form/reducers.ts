@@ -10,6 +10,7 @@ const initialState: FormState = {
   answers: [],
 }
 
+
 export function formReducer(
   state = initialState,
   { payload, type }: FormActionTypes
@@ -21,10 +22,7 @@ export function formReducer(
         ...payload,
       }
     case ADD_ANSWERS_TO_ARRAY:
-      return {
-        ...state,
-        ...payload,
-      }
+      return {questions:...state.questions, answers: [...state.answers, payload]}
     default:
       return state
   }
