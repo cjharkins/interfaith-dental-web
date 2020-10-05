@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import {
   Input,
   InputLabel,
@@ -6,48 +6,89 @@ import {
   Select,
   TextField,
 } from '@material-ui/core'
-import {AnswerObjectProps} from '../store/form/types'
+import { AnswerObjectProps } from '../store/form/types'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import Informational from './Informational/Informational'
 import { updateCount, updateMessage } from '../store/ui/actions'
-import {addAnswersToArray} from '../store/form/actions'
+import { addAnswersToArray } from '../store/form/actions'
 import { useDispatch } from 'react-redux'
 import { useBreakpoint } from './MediaBreakpointProvider'
 
 export interface ScrollViewProps {
   count?: number | undefined
-  answerChoices:AnswerObjectProps  [] | undefined
+  answerChoices: AnswerObjectProps[] | undefined
   questionText: string | undefined
   questionType: string | undefined
 }
 
-const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, count = 0 }) => {
+const Form: FC<ScrollViewProps> = ({
+  answerChoices,
+  questionText,
+  questionType,
+  count = 0,
+}) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
 
   const [checked, setChecked] = useState<string>('')
-  const [answerSelected, setAnswerSelected] = useState<string>('')
-  const [answersSelected, setAnswersSelected] = useState<string[]>([])
+  const [answerSelected, setAnswerSelected] = useState<any>(
+    questionType === 'freeText' ? '' : []
+  )
+  const [error, setError] = useState<{
+    isError: boolean
+    errorMessage: string
+  }>({ isError: false, errorMessage: '' })
   const handleChangeMultiple = (event: any) => {
     const { value } = event.target
-    if (answersSelected.some((answer) => answer === value)) {
+    if (
+      Array.isArray(answerSelected) &&
+      answerSelected.some((answer) => answer === value)
+    ) {
       return
     } else {
-      return setAnswersSelected(value)
+      return setAnswerSelected(value)
     }
   }
-  const handleChange = (event: any) => {
+
+  const validatePhone = (value: string): boolean => {
+    console.log(
+      /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/g.test(value)
+    )
+    return /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/g.test(value)
+  }
+
+  const validateInput = (
+    value: string,
+    questionText: string | undefined
+  ): boolean => {
+    switch (questionText) {
+      case 'Phone:':
+        const isPhone: boolean = validatePhone(value)
+        return isPhone
+      default:
+        return false
+    }
+  }
+
+  const getErrorMessage = (questionText: string | undefined): string => {
+    switch (questionText) {
+      case 'Phone:':
+        return 'Something is wrong with your phone number'
+      default:
+        return 'Somthing is just wrong, with you.'
+    }
+  }
+
+  const handleChange = (event: any, questionText: string | undefined) => {
     const { value } = event.target
     return setAnswerSelected(value)
   }
   useEffect(() => {
     console.log('dispatch checked with selection of ' + checked)
   }, [checked])
-
-  useEffect(() => console.log(answerSelected), [answerSelected])
-  useEffect(() => console.log(answersSelected), [answersSelected])
-
+  useEffect(() => {
+    console.log(error)
+  }, [error])
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -82,107 +123,142 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
           >
             <QuestionHeader count={count} />
             <div style={{ padding: '0 30px 30px' }}>
-            <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <div
-        style={{
-          width: breakpoints.sm ? '100%' : 700,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <p style={{ fontSize: breakpoints.sm ? '1.5em' : 36 }}>
-          {questionText}
-        </p>
-        {questionType === 'freeText' && (
-          <TextField
-            style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
-            id="outlined-basic"
-            variant="outlined"
-            label={'Please enter your answer here.'}
-            onChange={handleChange}
-          />
-        )}
-        {questionType === 'singleSelect' && (
-          <div style={{ width: '100%', fontSize: 14 }}>
-            {answerChoices !== undefined &&
-                answerChoices.length > 0 && answerChoices.map(({answerText, answerType, answerDisplayOrder, questionDisplayOrder}) => {
-                return (
-                  <div
-                    key={answerText}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'flex-start',
-                      alignContent: 'center',
-                      borderTop: '1px solid lightgrey',
-                      borderBottom:
-                        answerText === 'Case Worker' ? '1px solid lightgrey' : 'none',
-                      width: '100%',
-                      padding: '15px 0',
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      onChange={() => setChecked(answerText)}
-                      checked={checked === answerText}
-                    />{' '}
-                    {answerText}
-                  </div>
-                )
-              })}
-          </div>
-        )}
-        {questionType === 'dropDown' && (
-          <div style={{ width: '100%', fontSize: 14 }}>
-          <InputLabel id="demo-simple-select-label">
-              Please Select One
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={90}
-              onChange={handleChange}
-              style={{ width: 400 }}
-            >
-              {answerChoices !== undefined &&
-                 answerChoices.length > 0 && answerChoices.map(({answerText, answerType, answerDisplayOrder, questionDisplayOrder}) => (
-                  <MenuItem key={answerText} value={answerText}>
-                    {answerText}
-                  </MenuItem>
-                ))}
-            </Select>
-          </div>
-        )}
-        {questionType === 'multipleSelect' && (
-          <div style={{ width: '100%', fontSize: 14 }}>
-            <Select
-              labelId={questionText}
-              id={questionText}
-              multiple
-              value={answersSelected}
-              onChange={handleChangeMultiple}
-              input={<Input />}
-              style={{ width: 400 }}
-            >
-              {answerChoices !== undefined &&
-                 answerChoices.length > 0 && answerChoices.map(({answerText, answerType, answerDisplayOrder, questionDisplayOrder}) => {
-                return (
-                  <MenuItem key={answerText} value={answerText}>
-                    {answerText}
-                  </MenuItem>
-                )
-              })}
-            </Select>
-          </div>
-        )}
-      </div>
-    </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    width: breakpoints.sm ? '100%' : 700,
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <p style={{ fontSize: breakpoints.sm ? '1.5em' : 36 }}>
+                    {questionText}
+                  </p>
+                  {questionType === 'freeText' && (
+                    <TextField
+                      error={error.isError}
+                      helperText={error.errorMessage}
+                      style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
+                      id="outlined-basic"
+                      variant="outlined"
+                      label={'Please enter your answer here.'}
+                      type={'text'}
+                      onChange={(e) => {
+                        return handleChange(e, questionText)
+                      }}
+                    />
+                  )}
+                  {questionType === 'singleSelect' && (
+                    <div style={{ width: '100%', fontSize: 14 }}>
+                      {answerChoices !== undefined &&
+                        answerChoices.length > 0 &&
+                        answerChoices.map(
+                          ({
+                            answerText,
+                            answerType,
+                            answerDisplayOrder,
+                            questionDisplayOrder,
+                          }) => {
+                            return (
+                              <div
+                                key={answerText}
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'row',
+                                  justifyContent: 'flex-start',
+                                  alignContent: 'center',
+                                  borderTop: '1px solid lightgrey',
+                                  borderBottom:
+                                    answerText === 'Case Worker'
+                                      ? '1px solid lightgrey'
+                                      : 'none',
+                                  width: '100%',
+                                  padding: '15px 0',
+                                }}
+                              >
+                                <input
+                                  type="radio"
+                                  onChange={() => {
+                                    setAnswerSelected(answerText)
+                                  }}
+                                  checked={answerSelected === answerText}
+                                />{' '}
+                                {answerText}
+                              </div>
+                            )
+                          }
+                        )}
+                    </div>
+                  )}
+                  {questionType === 'dropDown' && (
+                    <div style={{ width: '100%', fontSize: 14 }}>
+                      <InputLabel id="demo-simple-select-label">
+                        Please Select One
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={90}
+                        onChange={(e) => {
+                          return handleChange(e, questionText)
+                        }}
+                        style={{ width: 400 }}
+                      >
+                        {answerChoices !== undefined &&
+                          answerChoices.length > 0 &&
+                          answerChoices.map(
+                            ({
+                              answerText,
+                              answerType,
+                              answerDisplayOrder,
+                              questionDisplayOrder,
+                            }) => (
+                              <MenuItem key={answerText} value={answerText}>
+                                {answerText}
+                              </MenuItem>
+                            )
+                          )}
+                      </Select>
+                    </div>
+                  )}
+                  {questionType === 'multipleSelect' && (
+                    <div style={{ width: '100%', fontSize: 14 }}>
+                      <Select
+                        labelId={questionText}
+                        id={questionText}
+                        multiple
+                        value={answerSelected}
+                        onChange={handleChangeMultiple}
+                        input={<Input />}
+                        style={{ width: 400 }}
+                      >
+                        {answerChoices !== undefined &&
+                          answerChoices.length > 0 &&
+                          answerChoices.map(
+                            ({
+                              answerText,
+                              answerType,
+                              answerDisplayOrder,
+                              questionDisplayOrder,
+                            }) => {
+                              return (
+                                <MenuItem key={answerText} value={answerText}>
+                                  {answerText}
+                                </MenuItem>
+                              )
+                            }
+                          )}
+                      </Select>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -194,14 +270,30 @@ const Form: FC<ScrollViewProps> = ({ answerChoices, questionText, questionType, 
           <div
             onClick={(): unknown => {
               // setValid(false)
-              //Validate if question has been answered 
+              //Validate if question has been answered
               console.log(questionText, answerSelected)
-              if(questionText && questionText.toLowerCase() === 'age:' && answerSelected === '60+') {
-                console.log("IFFFFFFFF")
-                //flush question array
-                dispatch(updateMessage( 'smileOn60'))
+              const validated = validateInput(answerSelected, questionText)
+              if (
+                questionText &&
+                questionText.toLowerCase() === 'age:' &&
+                answerSelected === '60+'
+              ) {
+                dispatch(updateMessage('smileOn60'))
               }
-              dispatch(addAnswersToArray({answerChoices, questionText, questionType, answerSelected}))
+
+              if (validated) {
+                dispatch(
+                  addAnswersToArray({
+                    questionOrderNumber: count,
+                    answerSelected,
+                  })
+                )
+              } else {
+                setError({
+                  isError: true,
+                  errorMessage: getErrorMessage(questionText),
+                })
+              }
               dispatch(updateCount(count))
               return
             }}

@@ -38,7 +38,7 @@ const App: FC = (props): JSX.Element => {
       informationType={informationType}
       didQualify={false}
     />,
-      ...questions.map((question) => (
+    ...questions.map((question) => (
       <Form
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
