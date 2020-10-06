@@ -66,7 +66,13 @@ const Form: FC<ScrollViewProps> = ({
         const isPhone: boolean = validatePhone(value)
         return isPhone
       default:
-        return false
+      console.log(value.length > 0, 'valuuuuuuu')
+        if(value.length > 0 && value !== '') {
+          return true
+        } else {
+          return false
+
+        }
     }
   }
 
@@ -75,7 +81,10 @@ const Form: FC<ScrollViewProps> = ({
       case 'Phone:':
         return 'Something is wrong with your phone number'
       default:
-        return 'Somthing is just wrong, with you.'
+      if(questionText !== '') {
+        return 'Somthing is wrong.'
+      }
+      return ''
     }
   }
 
@@ -86,6 +95,7 @@ const Form: FC<ScrollViewProps> = ({
   useEffect(() => {
     console.log('dispatch checked with selection of ' + checked)
   }, [checked])
+
   useEffect(() => {
     console.log(error)
   }, [error])
@@ -204,7 +214,7 @@ const Form: FC<ScrollViewProps> = ({
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        value={90}
+                        value={answerSelected}
                         onChange={(e) => {
                           return handleChange(e, questionText)
                         }}
@@ -269,9 +279,11 @@ const Form: FC<ScrollViewProps> = ({
         >
           <div
             onClick={(): unknown => {
-              // setValid(false)
+              const coveredCounties = ['Cheatham', 'Davidson', 'Dickson', 'Robertson', 'Rutherford', 'Sumner', 'Williamson', 'Wilson', 'Cannon', 'Bedford']
               //Validate if question has been answered
+              //prevent scroll if invalid!
               console.log(questionText, answerSelected)
+              console.log(questionText && questionText.toLowerCase() === 'county where you live:', 'huh')
               const validated = validateInput(answerSelected, questionText)
               if (
                 questionText &&
@@ -280,21 +292,38 @@ const Form: FC<ScrollViewProps> = ({
               ) {
                 dispatch(updateMessage('smileOn60'))
               }
+              //County questions should be checked elsewhere.  after all 3 questions answered if no
+              //counties Interfaith serves, updateMessage('oralHealth')
+              if (
+                questionText &&
+                questionText.toLowerCase().includes('county') &&
+                !coveredCounties.includes(answerSelected)
+                
+              ) {
+                console.log('boop')
+                dispatch(updateMessage('oralHealth'))
+              }
+              
 
               if (validated) {
+                setError({
+                  isError: false,
+                  errorMessage: getErrorMessage(''),
+                })
                 dispatch(
                   addAnswersToArray({
                     questionOrderNumber: count,
                     answerSelected,
                   })
                 )
+                dispatch(updateCount(count))
               } else {
                 setError({
                   isError: true,
                   errorMessage: getErrorMessage(questionText),
                 })
               }
-              dispatch(updateCount(count))
+            
               return
             }}
             style={{

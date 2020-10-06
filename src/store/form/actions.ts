@@ -8,11 +8,12 @@ import {
 const serverUrl =
   'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'
 
-export const getQuestions = () => async (
+export const getQuestions = (language:string) => async (
   dispatch: (arg0: { type: string; payload: any }) => void
 ) => {
   try {
-    const questionAPI = await fetch(serverUrl + 'forms/english', {
+    const formattedLanguage = language === 'Español' ? 'Spanish' : language
+    const questionAPI = await fetch(serverUrl + `forms/${formattedLanguage}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -12,8 +12,8 @@ import { RootState } from './store/index'
 
 const App: FC = (props): JSX.Element => {
   const breakpoints: any = useBreakpoint()
-  const showInformational = false
-
+  let showInformational 
+ 
   const [completed, setCompleted] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
 
@@ -22,6 +22,20 @@ const App: FC = (props): JSX.Element => {
     UIState
   >((state) => state.ui)
 
+  switch (informationType) {
+    case 'smileOn60':
+     showInformational = true
+      break
+    case 'oralHealth':
+    showInformational = true
+      break
+    case 'thankYou':
+    showInformational = true
+      break
+    default:
+    showInformational = false
+      break
+    }
   const { questions } = useSelector<RootState, FormState>((state) => state.form)
 
   const getPercentage = (numCompleted: number, total: number) =>
@@ -72,9 +86,10 @@ const App: FC = (props): JSX.Element => {
           marginTop: breakpoints.sm ? 178 : 128,
         }}
       >
+      {console.log(showInformational, 'show info?')}
         {!showInformational && questionsAsComponents.map((form) => form)}
         {showInformational && (
-          <Informational informationType="smileOn60" didQualify={true} />
+          <Informational informationType={informationType}  />
         )}
       </div>
     </div>
