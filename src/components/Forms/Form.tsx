@@ -8,8 +8,15 @@ import {
   TextField,
 } from '@material-ui/core'
 
+interface answerObj {
+  answerText: string
+  answerType: string
+  answerDisplayOrder: number
+  questionDisplayOrder: number
+}
+
 interface FormProps {
-  answerChoices: [] | undefined
+  answerChoices: Array<answerObj> | undefined
   questionText: string | undefined
   questionType: string | undefined
 }
@@ -19,10 +26,6 @@ const Form: FC<FormProps> = ({ answerChoices, questionText, questionType }) => {
   const [answerSelected, setAnswerSelected] = useState<string>('')
   const breakpoints: any = useBreakpoint()
   const [answersSelected, setAnswersSelected] = useState<string[]>([])
-
-  useEffect(() => {
-    console.log('dispatch checked with selection of ' + checked)
-  }, [checked])
 
   const handleChangeMultiple = (event: any) => {
     const { value } = event.target
@@ -36,9 +39,6 @@ const Form: FC<FormProps> = ({ answerChoices, questionText, questionType }) => {
     const { value } = event.target
     return setAnswerSelected(value)
   }
-
-  useEffect(() => console.log(answerSelected), [answerSelected])
-  useEffect(() => console.log(answersSelected), [answersSelected])
 
   return (
     <div
@@ -69,11 +69,10 @@ const Form: FC<FormProps> = ({ answerChoices, questionText, questionType }) => {
         {questionType === 'singleSelect' && (
           <div style={{ width: '100%', fontSize: 14 }}>
             {answerChoices !== undefined &&
-              // answerChoices.length > 0 &&
-              ['answerChoices', 'answer 1', 'answer 2'].map((val, index) => {
+              answerChoices.map((val, index) => {
                 return (
                   <div
-                    key={val}
+                    key={val.answerText}
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
@@ -81,17 +80,19 @@ const Form: FC<FormProps> = ({ answerChoices, questionText, questionType }) => {
                       alignContent: 'center',
                       borderTop: '1px solid lightgrey',
                       borderBottom:
-                        val === 'Case Worker' ? '1px solid lightgrey' : 'none',
+                        val.answerText === 'Case Worker'
+                          ? '1px solid lightgrey'
+                          : 'none',
                       width: '100%',
                       padding: '15px 0',
                     }}
                   >
                     <input
                       type="radio"
-                      onChange={() => setChecked(val)}
-                      checked={checked === val}
+                      onChange={() => setChecked(val.answerText)}
+                      checked={checked === val.answerText}
                     />{' '}
-                    {val}
+                    {val.answerText}
                   </div>
                 )
               })}
@@ -110,10 +111,9 @@ const Form: FC<FormProps> = ({ answerChoices, questionText, questionType }) => {
               style={{ width: 400 }}
             >
               {answerChoices !== undefined &&
-                // answerChoices.length > 0 &&
-                ['answerChoices', 'answer 1', 'answer 2'].map((val, index) => (
-                  <MenuItem key={val} value={val}>
-                    {val}
+                answerChoices.map((val, index) => (
+                  <MenuItem key={val.answerText} value={val.answerText}>
+                    {val.answerText}
                   </MenuItem>
                 ))}
             </Select>
@@ -131,13 +131,14 @@ const Form: FC<FormProps> = ({ answerChoices, questionText, questionType }) => {
               input={<Input />}
               style={{ width: 400 }}
             >
-              {['option 1', 'option 2', 'option 3'].map((val, index) => {
-                return (
-                  <MenuItem key={val} value={val}>
-                    {val}
-                  </MenuItem>
-                )
-              })}
+              {answerChoices !== undefined &&
+                answerChoices.map((val, index) => {
+                  return (
+                    <MenuItem key={val.answerText} value={val.answerText}>
+                      {val.answerText}
+                    </MenuItem>
+                  )
+                })}
             </Select>
           </div>
         )}
