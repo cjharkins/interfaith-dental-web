@@ -29,15 +29,21 @@ export const adminLogin = (loginData: LoginData) => async (
       type: ADMIN_LOGIN_ERROR,
       payload: { isError: true, error: 'No such user' },
     })
-  } else if (password !== "pwd!!!1") {
+  } else if (password !== 'pwd!!!1') {
     dispatch({
       type: ADMIN_LOGIN_ERROR,
-      payload: { isError: true, error: 'Incorrect password' }
+      payload: { isError: true, error: 'Incorrect password' },
     })
   } else {
+    const now = new Date()
+    const token = {
+      token: '123abc',
+      expires: now.getTime() + 30 * 60000,
+    }
+    localStorage.setItem('interfaith-token', JSON.stringify(token))
     dispatch({
       type: ADMIN_LOGIN,
-      payload: { loggedIn: true, token: '123abc'}
+      payload: { loggedIn: true, token: '123abc' },
     })
   }
 }
@@ -48,6 +54,7 @@ export const adminLogout = () => async (
   try {
     const adminLogoutAPI = await fetch('...')
     const data = await adminLogoutAPI.json()
+    localStorage.removeItem('interfaith-token')
     dispatch({ type: ADMIN_LOGOUT, payload: data })
   } catch (err) {
     console.log(err)
