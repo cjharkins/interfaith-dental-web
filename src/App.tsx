@@ -52,13 +52,14 @@ const App: FC = (props): JSX.Element => {
       informationType={informationType}
       didQualify={false}
     />,
-    ...questions.map((question) => (
+    ...questions.map((question, index) => (
       <Form
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
         answerChoices={question.answerChoices}
         questionText={question.questionText}
         questionType={question.questionType}
+        lastOf={questions.length - 1 === index}
       />
     )),
   ]

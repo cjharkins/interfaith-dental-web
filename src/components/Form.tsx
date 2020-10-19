@@ -19,6 +19,7 @@ export interface ScrollViewProps {
   answerChoices: AnswerObjectProps[] | undefined
   questionText: string | undefined
   questionType: string | undefined
+  lastOf: boolean
 }
 
 const Form: FC<ScrollViewProps> = ({
@@ -26,6 +27,7 @@ const Form: FC<ScrollViewProps> = ({
   questionText,
   questionType,
   count = 0,
+  lastOf = false,
 }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
@@ -66,12 +68,11 @@ const Form: FC<ScrollViewProps> = ({
         const isPhone: boolean = validatePhone(value)
         return isPhone
       default:
-      console.log(value.length > 0, 'valuuuuuuu')
-        if(value.length > 0 && value !== '') {
+        console.log(value.length > 0, 'valuuuuuuu')
+        if (value.length > 0 && value !== '') {
           return true
         } else {
           return false
-
         }
     }
   }
@@ -81,10 +82,10 @@ const Form: FC<ScrollViewProps> = ({
       case 'Phone:':
         return 'Something is wrong with your phone number'
       default:
-      if(questionText !== '') {
-        return 'Somthing is wrong.'
-      }
-      return ''
+        if (questionText !== '') {
+          return 'Somthing is wrong.'
+        }
+        return ''
     }
   }
 
@@ -154,6 +155,7 @@ const Form: FC<ScrollViewProps> = ({
                     <TextField
                       error={error.isError}
                       helperText={error.errorMessage}
+                      className={((questionText || 'unknown') + count).replace(/\s/g, '').replace(':', '').toLowerCase()}
                       style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
                       id="outlined-basic"
                       variant="outlined"
@@ -194,6 +196,7 @@ const Form: FC<ScrollViewProps> = ({
                               >
                                 <input
                                   type="radio"
+                                  id={answerText.replace(/\s/g, '').toLowerCase()}
                                   onChange={() => {
                                     setAnswerSelected(answerText)
                                   }}
@@ -278,18 +281,35 @@ const Form: FC<ScrollViewProps> = ({
           href={`#view${count}`}
         >
           <div
+          id={`form${count}`}
             onClick={(): unknown => {
-              const coveredCounties = ['Cheatham', 'Davidson', 'Dickson', 'Robertson', 'Rutherford', 'Sumner', 'Williamson', 'Wilson', 'Cannon', 'Bedford']
+              const coveredCounties = [
+                'Cheatham',
+                'Davidson',
+                'Dickson',
+                'Robertson',
+                'Rutherford',
+                'Sumner',
+                'Williamson',
+                'Wilson',
+                'Cannon',
+                'Bedford',
+              ]
               //Validate if question has been answered
               //prevent scroll if invalid!
               console.log(questionText, answerSelected)
-              console.log(questionText && questionText.toLowerCase() === 'county where you live:', 'huh')
+              console.log(
+                questionText &&
+                  questionText.toLowerCase() === 'county where you live:',
+                'huh'
+              )
               const validated = validateInput(answerSelected, questionText)
               if (
                 questionText &&
                 questionText.toLowerCase() === 'age:' &&
                 answerSelected === '60+'
               ) {
+                //postAnswers
                 dispatch(updateMessage('smileOn60'))
               }
               //County questions should be checked elsewhere.  after all 3 questions answered if no
@@ -298,12 +318,11 @@ const Form: FC<ScrollViewProps> = ({
                 questionText &&
                 questionText.toLowerCase().includes('county') &&
                 !coveredCounties.includes(answerSelected)
-                
               ) {
+                //postAnswers
                 console.log('boop')
                 dispatch(updateMessage('oralHealth'))
               }
-              
 
               if (validated) {
                 setError({
@@ -323,7 +342,7 @@ const Form: FC<ScrollViewProps> = ({
                   errorMessage: getErrorMessage(questionText),
                 })
               }
-            
+
               return
             }}
             style={{
@@ -337,16 +356,22 @@ const Form: FC<ScrollViewProps> = ({
               margin: '0 auto',
             }}
           >
-            <div style={{ margin: '0 auto', color: '#003B49' }}>NEXT</div>
-            <div style={{ margin: '-10px auto 0' }}>
-              <ExpandMoreIcon
-                style={{
-                  width: 45,
-                  height: 'auto',
-                  color: '#003B49',
-                }}
-              />
+            <div style={{ margin: '0 auto', color: '#003B49' }}>
+              {lastOf ? 'SUBMIT' : 'NEXT'}
             </div>
+            {lastOf ? (
+              <div />
+            ) : (
+              <div style={{ margin: '-10px auto 0' }}>
+                <ExpandMoreIcon
+                  style={{
+                    width: 45,
+                    height: 'auto',
+                    color: '#003B49',
+                  }}
+                />
+              </div>
+            )}
           </div>
         </a>
       </div>
