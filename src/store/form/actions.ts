@@ -8,7 +8,7 @@ import {
 const serverUrl =
   'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'
 
-export const getQuestions = (language:string) => async (
+export const getQuestions = (language: string) => async (
   dispatch: (arg0: { type: string; payload: any }) => void
 ) => {
   try {
@@ -56,5 +56,64 @@ export const addAnswersToArray = (questionData: CustomerAnswers) => async (
   dispatch({
     type: ADD_ANSWERS_TO_ARRAY,
     payload: questionData,
+  })
+}
+
+interface PostFormState {
+  form: {
+    applicant: {
+      id: string
+    }
+    questions: any[]
+  }
+}
+
+export const handlePostForm = (state: FormState) => {
+  const model: any = {
+    form: {
+      applicant: {
+        id: '', // given by backend?
+      },
+      questions: [],
+    },
+  }
+
+  const allAnswersGiven: any[] = state.answers.map(
+    ({ questionOrderNumber, answerSelected }): any => {
+      const multipleAnswers =
+        answerSelected &&
+        Array.isArray(answerSelected) &&
+        answerSelected.map((option) => {
+          return {
+            applicantChoice: {
+              answerId: questionOrderNumber,
+              text: option,
+            },
+          }
+        })
+      return {
+        id: questionOrderNumber,
+        applicantChoices: [
+          ...(multipleAnswers || [
+            {
+              applicantChoice: {
+                answerId: questionOrderNumber,
+                text: answerSelected,
+              },
+            },
+          ]),
+        ],
+      }
+    }
+  )
+
+  model.form.questions = allAnswersGiven
+
+  fetch(serverUrl + 'form', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(model),
+  }).then((res) => {
+    console.log(res)
   })
 }

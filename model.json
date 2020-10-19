@@ -1,0 +1,22 @@
+{
+  "form": {
+    "applicant": {
+      "id": ""
+    },
+    "questions": [
+      {
+        "question": {
+          "id": "",
+          "applicantChoices": [
+            {
+              "applicantChoice": {
+                "answerId": "",
+                "text": ""
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

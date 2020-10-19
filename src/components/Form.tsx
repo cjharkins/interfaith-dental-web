@@ -6,13 +6,14 @@ import {
   Select,
   TextField,
 } from '@material-ui/core'
-import { AnswerObjectProps } from '../store/form/types'
+import { AnswerObjectProps, FormState } from '../store/form/types'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import { updateCount, updateMessage } from '../store/ui/actions'
-import { addAnswersToArray } from '../store/form/actions'
-import { useDispatch } from 'react-redux'
+import { addAnswersToArray, handlePostForm } from '../store/form/actions'
+import { useDispatch, useSelector } from 'react-redux'
 import { useBreakpoint } from './MediaBreakpointProvider'
+import { RootState } from '../store'
 
 export interface ScrollViewProps {
   count?: number | undefined
@@ -31,6 +32,9 @@ const Form: FC<ScrollViewProps> = ({
 }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
+  const { questions, answers } = useSelector<RootState, FormState>(
+    ({ form }) => form
+  )
 
   const [checked, setChecked] = useState<string>('')
   const [answerSelected, setAnswerSelected] = useState<any>(
@@ -155,7 +159,10 @@ const Form: FC<ScrollViewProps> = ({
                     <TextField
                       error={error.isError}
                       helperText={error.errorMessage}
-                      className={((questionText || 'unknown') + count).replace(/\s/g, '').replace(':', '').toLowerCase()}
+                      className={((questionText || 'unknown') + count)
+                        .replace(/\s/g, '')
+                        .replace(':', '')
+                        .toLowerCase()}
                       style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
                       id="outlined-basic"
                       variant="outlined"
@@ -196,7 +203,9 @@ const Form: FC<ScrollViewProps> = ({
                               >
                                 <input
                                   type="radio"
-                                  id={answerText.replace(/\s/g, '').toLowerCase()}
+                                  id={answerText
+                                    .replace(/\s/g, '')
+                                    .toLowerCase()}
                                   onChange={() => {
                                     setAnswerSelected(answerText)
                                   }}
@@ -281,7 +290,7 @@ const Form: FC<ScrollViewProps> = ({
           href={`#view${count}`}
         >
           <div
-          id={`form${count}`}
+            id={`form${count}`}
             onClick={(): unknown => {
               const coveredCounties = [
                 'Cheatham',
@@ -297,12 +306,7 @@ const Form: FC<ScrollViewProps> = ({
               ]
               //Validate if question has been answered
               //prevent scroll if invalid!
-              console.log(questionText, answerSelected)
-              console.log(
-                questionText &&
-                  questionText.toLowerCase() === 'county where you live:',
-                'huh'
-              )
+
               const validated = validateInput(answerSelected, questionText)
               if (
                 questionText &&
@@ -343,7 +347,12 @@ const Form: FC<ScrollViewProps> = ({
                 })
               }
 
-              return
+              if (lastOf) {
+                handlePostForm({ questions, answers })
+                return
+              } else {
+                return
+              }
             }}
             style={{
               width: '116px',
