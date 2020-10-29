@@ -14,6 +14,7 @@ const initialState: AuthState = {
   token: 'string',
   isError: false,
   error: '',
+  apiKey: '',
 }
 
 export function authReducer(

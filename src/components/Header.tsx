@@ -1,11 +1,9 @@
 import React, { FC } from 'react'
 import Logo from './Logo'
 import { LanguageSelector } from './LanguageSelector'
-import LoginDialogue from './LoginDialogue'
 import { useBreakpoint } from './MediaBreakpointProvider'
 import { connect } from 'react-redux'
 import { AuthState } from '../store/auth/types'
-import Logout from './Logout'
 
 import AuthButton from './AuthButton'
 

@@ -35,12 +35,12 @@ export const LoginDialogue: FC<LoginDialogueProps> = (props) => {
     (state) => state.auth
   )
   const classes = useStyles()
-  const [user, setUsername] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
 
   const handleAdminLogin = () => {
-    dispatch(adminLogin({ user, password }))
+    dispatch(adminLogin({ username, password }))
   }
 
   // https://github.com/babel/babel/issues/8837

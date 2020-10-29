@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import Header from '../components/Header'
 import ScrollView from '../components/ScrollView'
-import Form from '../components/Forms/Form'
+import AdminForm from '../components/Forms/AdminForm'
 import { ProgressBar } from '../components/ProgressBar'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
@@ -36,7 +36,7 @@ const Admin: FC = (props): JSX.Element => {
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
       >
-        <Form
+        <AdminForm
           answerChoices={question.answerChoices}
           questionText={question.questionText}
           questionType={question.questionType}
