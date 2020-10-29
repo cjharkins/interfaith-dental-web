@@ -21,7 +21,6 @@ export const getQuestions = (language: string) => async (
       },
     })
     const data = await questionAPI.json()
-    console.log(data, 'data')
     dispatch({ type: GET_QUESTIONS, payload: data })
   } catch (err) {
     console.log(err, 'There was an error.')
@@ -52,7 +51,6 @@ export const postAnswers = (formData: FormState) => async (
 export const addAnswersToArray = (questionData: CustomerAnswers) => async (
   dispatch: (arg0: { type: string; payload: CustomerAnswers }) => void
 ) => {
-  console.log(questionData)
   dispatch({
     type: ADD_ANSWERS_TO_ARRAY,
     payload: questionData,
@@ -105,7 +103,6 @@ export const handlePostForm = (state: FormState) => {
   )
 
   model.form.questions = allAnswersGiven
-console.log(JSON.stringify(model.form))
   fetch(serverUrl + 'forms', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -12,7 +12,7 @@ export const updateMessage = (message: string | undefined = '') => (
 ) => {
   dispatch({ type: INFORMATION, payload: message })
 }
-export const setIsCountyCovered = (message: boolean ) => (
+export const setIsCountyCovered = (message: boolean) => (
   dispatch: (arg0: { type: string; payload: any }) => void
 ) => {
   console.log(message, 'COUNTY')

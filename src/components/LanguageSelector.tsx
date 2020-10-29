@@ -18,11 +18,9 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({ style }) => {
   ]
   const [showOptions, setShowOptions] = useState(false)
   const [selectedOption, setSelectedOption] = useState('English')
-  console.log(selectedOption, 'option')
 
   useEffect(() => {
     dispatch(getQuestions(selectedOption))
-      console.log('fired api call')
   }, [selectedOption])
 
   return (

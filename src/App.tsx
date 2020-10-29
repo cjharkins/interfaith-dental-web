@@ -88,7 +88,6 @@ const App: FC = (props): JSX.Element => {
           marginTop: breakpoints.sm ? 178 : 128,
         }}
       >
-      {console.log(showInformational, 'show info?')}
         {!showInformational && questionsAsComponents.map((form) => form)}
         {showInformational && (
           <Informational informationType={informationType}  />

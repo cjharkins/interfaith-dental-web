@@ -26,7 +26,7 @@ export function formReducer(
       const isUpdate = answers.some(
         (question) => question.questionOrderNumber === questionOrderNumber
       )
-
+        console.log(answers, payload, state.questions )
       if (isUpdate) {
         const newState = state.answers.filter(
           (someAnswer) => someAnswer.questionOrderNumber !== questionOrderNumber
@@ -36,8 +36,17 @@ export function formReducer(
           answers: [...newState, payload],
         }
       } else {
+        const answerChoices = state.questions.filter(q => q.questionDisplayOrder === payload.questionOrderNumber)[0].answerChoices
+        const selectedAnswerOrderNumber = answerChoices?.filter(a => a.answerText === payload.answerSelected)[0].answerDisplayOrder
+        console.log(selectedAnswerOrderNumber == '1', payload.questionOrderNumber)
+        let updatedQuestionList = state.questions
+                
+        if (payload.questionOrderNumber === 1 && selectedAnswerOrderNumber == '1') {
+             updatedQuestionList.splice(1, 3, )
+        }
+        
         return {
-          questions: [...state.questions],
+          questions: [...updatedQuestionList],
           answers: [...state.answers, payload],
         }
       }
