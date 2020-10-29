@@ -52,10 +52,10 @@ export const adminLogout = () => async (
   dispatch: (arg0: { type: string; payload: any }) => void
 ) => {
   try {
-    const adminLogoutAPI = await fetch('...')
-    const data = await adminLogoutAPI.json()
+    // const adminLogoutAPI = await fetch('...')
+    // const data = await adminLogoutAPI.json()
     localStorage.removeItem('interfaith-token')
-    dispatch({ type: ADMIN_LOGOUT, payload: data })
+    dispatch({ type: ADMIN_LOGOUT, payload: { loggedIn: false } })
   } catch (err) {
     console.log(err)
   }

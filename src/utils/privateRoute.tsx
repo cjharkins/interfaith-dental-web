@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { AuthState } from '../store/auth/types'
-import { useDispatch, connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 interface ProtectRouteProps {
   auth?: AuthState | undefined
@@ -11,13 +11,17 @@ interface ProtectRouteProps {
 }
 
 export const PrivateRoute: FC<ProtectRouteProps> = ({
-  auth,
+  // auth,
   component,
   path,
 }) => {
   const dispatch = useDispatch()
+  const auth: any = useSelector<AuthState | undefined>(
+    (state: any) => state.auth
+  )
 
   useEffect(() => {
+    console.log(auth)
     const token = localStorage.getItem('interfaith-token')
     const parsedToken = token !== null ? JSON.parse(token) : {}
     const now = new Date()
@@ -39,8 +43,4 @@ export const PrivateRoute: FC<ProtectRouteProps> = ({
   )
 }
 
-const mapStateToProps = (state: any) => {
-  return { auth: state.auth }
-}
-
-export default connect(mapStateToProps)(PrivateRoute)
+export default PrivateRoute

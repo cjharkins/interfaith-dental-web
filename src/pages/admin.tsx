@@ -1,21 +1,16 @@
 import React, { FC, useState, useEffect } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Header from '../components/Header'
-import { ProgressBar } from '../components/ProgressBar'
 import ScrollView from '../components/ScrollView'
 import Form from '../components/Forms/Form'
-import Informational from '../components/Informational/Informational'
+import { ProgressBar } from '../components/ProgressBar'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
 import { UIState } from '../store/ui/types'
 import { RootState } from '../store/index'
 import { FormState } from '../store/form/types'
-import Question1 from '../components/Forms/Question1'
-import Question2 from '../components/Forms/Question2'
 
-const Public: FC = (props): JSX.Element => {
+const Admin: FC = (props): JSX.Element => {
   const breakpoints: any = useBreakpoint()
-  const showInformational = false
 
   const [completed, setCompleted] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
@@ -60,14 +55,17 @@ const Public: FC = (props): JSX.Element => {
       }}
     >
       <div id="viewTop" />
-      <Header />
+      <Header>
+        <span style={{ width: '90%', visibility: 'hidden' }}>
+          <ProgressBar completed={completed} showSmall={true} />
+        </span>
+      </Header>
       <div
         style={{
           display: 'flex',
           height: breakpoints.sm ? 'calc(100% - 178)' : 'calc(100% - 128px)',
           width: '100%',
           flexDirection: 'column',
-          // position: 'absolute',
           marginTop: breakpoints.sm ? 178 : 128,
         }}
       >
@@ -77,4 +75,4 @@ const Public: FC = (props): JSX.Element => {
   )
 }
 
-export default Public
+export default Admin
