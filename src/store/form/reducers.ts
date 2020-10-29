@@ -38,11 +38,10 @@ export function formReducer(
       } else {
         const answerChoices = state.questions.filter(q => q.questionDisplayOrder === payload.questionOrderNumber)[0].answerChoices
         const selectedAnswerOrderNumber = answerChoices?.filter(a => a.answerText === payload.answerSelected)[0].answerDisplayOrder
-        console.log(selectedAnswerOrderNumber == '1', payload.questionOrderNumber)
         let updatedQuestionList = state.questions
                 
         if (payload.questionOrderNumber === 1 && selectedAnswerOrderNumber == '1') {
-             updatedQuestionList.splice(1, 3, )
+          updatedQuestionList.splice(1, 3, )
         }
         
         return {

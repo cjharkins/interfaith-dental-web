@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import Header from '../components/Header'
 import { ProgressBar } from '../components/ProgressBar'
-import Form from '../components/Form'
+import Form from '../components/Forms/Form'
 import Informational from '../components/Informational/Informational'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'

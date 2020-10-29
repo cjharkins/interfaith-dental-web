@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
 import Header from '../components/Header'
-import Form from '../components/Form'
+import AdminForm from '../components/Forms/AdminForm'
 import { ProgressBar } from '../components/ProgressBar'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
@@ -31,7 +31,7 @@ const Admin: FC = (props): JSX.Element => {
 
   const questionsAsComponents = [
     ...questions.map((question, index) => (
-      <Form
+      <AdminForm
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
         answerChoices={question.answerChoices}
