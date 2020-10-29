@@ -21,7 +21,6 @@ export const PrivateRoute: FC<ProtectRouteProps> = ({
   )
 
   useEffect(() => {
-    console.log(auth)
     const token = localStorage.getItem('interfaith-token')
     const parsedToken = token !== null ? JSON.parse(token) : {}
     const now = new Date()

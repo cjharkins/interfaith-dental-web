@@ -68,11 +68,33 @@ const Form: FC<ScrollViewProps> = ({
       return setAnswerSelected(value)
     }
   }
-
+  const setInformationalScreen = () => {
+    if (
+      questionDisplayOrder &&
+      questionDisplayOrder === 6 &&
+      answerChoices?.filter(a => a.answerText === answerSelected)[0].answerDisplayOrder.toString() === '10'
+    ) {
+      handlePostForm({ questions, answers })
+      dispatch(updateMessage('smileOn60'))
+    }
+    
+    const acceptedAnswers = ['3', '9', '12', '20', '23', '75', '76', '84', '95']
+    const answerChoiceOrder = answerChoices?.filter(a => a.answerText === answerSelected)[0].answerDisplayOrder.toString() || ''
+    const countyQuestion = [10, 11, 12]
+    if (questionDisplayOrder && countyQuestion.includes(questionDisplayOrder) &&
+      acceptedAnswers.includes(answerChoiceOrder) && isCoveredCounty == false) {
+        dispatch(setIsCountyCovered(true))
+    }
+    if (
+      questionDisplayOrder &&
+      questionDisplayOrder === 13
+      && !isCoveredCounty && answerChoiceOrder === '1'
+    ) {
+      dispatch(updateMessage('oralHealth'))
+    }
+  }
+  
   const validatePhone = (value: string): boolean => {
-    console.log(
-      /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/g.test(value)
-    )
     return /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/g.test(value)
   }
 
@@ -85,7 +107,6 @@ const Form: FC<ScrollViewProps> = ({
         const isPhone: boolean = validatePhone(value)
         return isPhone
       default:
-        console.log(value.length > 0, 'valuuuuuuu')
         if (value.length > 0 && value !== '') {
           return true
         } else {
@@ -304,69 +325,11 @@ const Form: FC<ScrollViewProps> = ({
           <div
             id={`form${count}`}
             onClick={(): unknown => {
-              const coveredCounties = [
-                'Cheatham',
-                'Davidson',
-                'Dickson',
-                'Robertson',
-                'Rutherford',
-                'Sumner',
-                'Williamson',
-                'Wilson',
-                'Cannon',
-                'Bedford',
-              ]
               //Validate if question has been answered
               //prevent scroll if invalid!
 
-              const validated = validateInput(
-                answerSelected,
-                questionDisplayOrder
-              )
-              if (
-                questionDisplayOrder &&
-                questionDisplayOrder === 6 &&
-                answerChoices
-                  ?.filter((a) => a.answerText === answerSelected)[0]
-                  .answerDisplayOrder.toString() === '10'
-              ) {
-                handlePostForm({ questions, answers })
-                dispatch(updateMessage('smileOn60'))
-              }
-              //County questions should be checked elsewhere.  after all 3 questions answered if no
-              //counties Interfaith serves, updateMessage('oralHealth')
-              if (
-                questionDisplayOrder &&
-                questionDisplayOrder === (10 || 11 || 12) &&
-                answerChoices
-                  ?.filter((a) => a.answerText === answerSelected)[0]
-                  .answerDisplayOrder.toString() ===
-                  ('3' ||
-                    '9' ||
-                    '12' ||
-                    '20' ||
-                    '23' ||
-                    '75' ||
-                    '76' ||
-                    '84' ||
-                    '95') &&
-                isCoveredCounty
-              ) {
-                setIsCountyCovered(true)
-              }
-              if (
-                questionDisplayOrder &&
-                questionDisplayOrder === 13 &&
-                !isCoveredCounty &&
-                answerChoices
-                  ?.filter((a) => a.answerText === answerSelected)[0]
-                  .answerDisplayOrder.toString() === '1'
-              ) {
-                //postAnswers
-                console.log('boop', answers)
-                dispatch(updateMessage('oralHealth'))
-              }
-
+              const validated = validateInput(answerSelected, questionDisplayOrder)
+              setInformationalScreen()
               if (validated) {
                 setError({
                   isError: false,

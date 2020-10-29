@@ -51,7 +51,6 @@ export const postAnswers = (formData: FormState) => async (
 export const addAnswersToArray = (questionData: CustomerAnswers) => async (
   dispatch: (arg0: { type: string; payload: CustomerAnswers }) => void
 ) => {
-  console.log(questionData)
   dispatch({
     type: ADD_ANSWERS_TO_ARRAY,
     payload: questionData,
