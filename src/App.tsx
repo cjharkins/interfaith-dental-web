@@ -58,6 +58,7 @@ const App: FC = (props): JSX.Element => {
         count={question.questionDisplayOrder}
         answerChoices={question.answerChoices}
         questionText={question.questionText}
+        questionDisplayOrder={question.questionDisplayOrder}
         questionType={question.questionType}
         lastOf={questions.length - 1 === index}
       />

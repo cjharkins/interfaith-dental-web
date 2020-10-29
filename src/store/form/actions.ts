@@ -71,9 +71,8 @@ interface PostFormState {
 export const handlePostForm = (state: FormState) => {
   const model: any = {
     form: {
-      applicant: {
-        id: '', // given by backend?
-      },
+      ApplicantId: '475945903', // generate using date and applicant last name?
+      language:'English',
       questions: [],
     },
   }
@@ -85,21 +84,19 @@ export const handlePostForm = (state: FormState) => {
         Array.isArray(answerSelected) &&
         answerSelected.map((option) => {
           return {
-            applicantChoice: {
-              answerId: questionOrderNumber,
-              text: option,
-            },
+            
+             
+              answerText: option,
+            
           }
         })
       return {
-        id: questionOrderNumber,
+        displayOrder: questionOrderNumber,
+        
         applicantChoices: [
           ...(multipleAnswers || [
             {
-              applicantChoice: {
-                answerId: questionOrderNumber,
-                text: answerSelected,
-              },
+                answerText: answerSelected,
             },
           ]),
         ],
@@ -108,11 +105,11 @@ export const handlePostForm = (state: FormState) => {
   )
 
   model.form.questions = allAnswersGiven
-
-  fetch(serverUrl + 'form', {
+console.log(JSON.stringify(model.form))
+  fetch(serverUrl + 'forms', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(model),
+    body: JSON.stringify(model.form),
   }).then((res) => {
     console.log(res)
   })

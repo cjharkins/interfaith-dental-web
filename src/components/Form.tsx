@@ -9,8 +9,9 @@ import {
 import { AnswerObjectProps, FormState } from '../store/form/types'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import { updateCount, updateMessage } from '../store/ui/actions'
+import { updateCount, updateMessage, setIsCountyCovered } from '../store/ui/actions'
 import { addAnswersToArray, handlePostForm } from '../store/form/actions'
+import { UIState } from '../store/ui/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBreakpoint } from './MediaBreakpointProvider'
 import { RootState } from '../store'
@@ -18,6 +19,7 @@ import { RootState } from '../store'
 export interface ScrollViewProps {
   count?: number | undefined
   answerChoices: AnswerObjectProps[] | undefined
+  questionDisplayOrder: number | undefined
   questionText: string | undefined
   questionType: string | undefined
   lastOf: boolean
@@ -27,6 +29,7 @@ const Form: FC<ScrollViewProps> = ({
   answerChoices,
   questionText,
   questionType,
+  questionDisplayOrder,
   count = 0,
   lastOf = false,
 }) => {
@@ -40,10 +43,17 @@ const Form: FC<ScrollViewProps> = ({
   const [answerSelected, setAnswerSelected] = useState<any>(
     questionType === 'freeText' ? '' : []
   )
+
+  const { isCoveredCounty } = useSelector<
+    RootState,
+    UIState
+    >((state) => state.ui)
+  
   const [error, setError] = useState<{
     isError: boolean
     errorMessage: string
   }>({ isError: false, errorMessage: '' })
+
   const handleChangeMultiple = (event: any) => {
     const { value } = event.target
     if (
@@ -65,10 +75,10 @@ const Form: FC<ScrollViewProps> = ({
 
   const validateInput = (
     value: string,
-    questionText: string | undefined
+    questionDisplayOrder: number | undefined
   ): boolean => {
-    switch (questionText) {
-      case 'Phone:':
+    switch (questionDisplayOrder) {
+      case 4 || 9:
         const isPhone: boolean = validatePhone(value)
         return isPhone
       default:
@@ -95,7 +105,8 @@ const Form: FC<ScrollViewProps> = ({
 
   const handleChange = (event: any, questionText: string | undefined) => {
     const { value } = event.target
-    return setAnswerSelected(value)
+    setAnswerSelected(value)
+    return
   }
   useEffect(() => {
     console.log('dispatch checked with selection of ' + checked)
@@ -228,6 +239,7 @@ const Form: FC<ScrollViewProps> = ({
                         id="demo-simple-select"
                         value={answerSelected}
                         onChange={(e) => {
+                          
                           return handleChange(e, questionText)
                         }}
                         style={{ width: 400 }}
@@ -256,7 +268,10 @@ const Form: FC<ScrollViewProps> = ({
                         id={questionText}
                         multiple
                         value={answerSelected}
-                        onChange={handleChangeMultiple}
+                        onChange={(e) => {
+                          return  handleChangeMultiple
+                          }
+                        }
                         input={<Input />}
                         style={{ width: 400 }}
                       >
@@ -307,24 +322,29 @@ const Form: FC<ScrollViewProps> = ({
               //Validate if question has been answered
               //prevent scroll if invalid!
 
-              const validated = validateInput(answerSelected, questionText)
+              const validated = validateInput(answerSelected, questionDisplayOrder)
               if (
-                questionText &&
-                questionText.toLowerCase() === 'age:' &&
-                answerSelected === '60+'
+                questionDisplayOrder &&
+                questionDisplayOrder === 6 &&
+                answerChoices?.filter(a => a.answerText === answerSelected)[0].answerDisplayOrder.toString() === '10'
               ) {
-                //postAnswers
+                handlePostForm({ questions, answers })
                 dispatch(updateMessage('smileOn60'))
               }
               //County questions should be checked elsewhere.  after all 3 questions answered if no
               //counties Interfaith serves, updateMessage('oralHealth')
+              if (questionDisplayOrder && questionDisplayOrder === (10 || 11 || 12) &&
+                answerChoices?.filter(a => a.answerText === answerSelected)[0].answerDisplayOrder.toString() ===
+                ('3'|| '9' || '12' || '20' || '23' || '75' || '76' || '84'|| '95') && isCoveredCounty) {
+                 setIsCountyCovered(true)
+              }
               if (
-                questionText &&
-                questionText.toLowerCase().includes('county') &&
-                !coveredCounties.includes(answerSelected)
+                questionDisplayOrder &&
+                questionDisplayOrder === 13
+                && !isCoveredCounty && answerChoices?.filter(a=> a.answerText === answerSelected)[0].answerDisplayOrder.toString() === '1'
               ) {
                 //postAnswers
-                console.log('boop')
+                console.log('boop',answers)
                 dispatch(updateMessage('oralHealth'))
               }
 
@@ -346,7 +366,7 @@ const Form: FC<ScrollViewProps> = ({
                   errorMessage: getErrorMessage(questionText),
                 })
               }
-
+             
               if (lastOf) {
                 handlePostForm({ questions, answers })
                 return

@@ -3,11 +3,13 @@ import {
   UIActionTypes,
   QUESTIONS_COMPLETE,
   INFORMATION,
+  COVERED_COUNTY,
 } from './types'
 
 const initialState: UIState = {
   informationType: 'welcome',
   questionsComplete: 0,
+  isCoveredCounty: false,
 }
 
 export function uiReducer(
@@ -21,11 +23,15 @@ export function uiReducer(
         questionsComplete: payload,
       }
     case INFORMATION:
-    console.log(payload)
       return {
         ...state,
         informationType: payload,
       }
+    case COVERED_COUNTY:
+      return {
+        ...state,
+        isCoveredCounty: payload,
+  }
     default:
       return state
   }
