@@ -331,7 +331,10 @@ const Form: FC<ScrollViewProps> = ({
               //prevent scroll if invalid!
 
               const validated = validateInput(answerSelected, questionDisplayOrder)
-              setInformationalScreen()
+              if (questionType !== 'freeText') {
+                
+                setInformationalScreen()
+              }
               if (validated) {
                 setError({
                   isError: false,
