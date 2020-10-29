@@ -51,26 +51,35 @@ export function formReducer(
           selectedAnswerOrderNumber == '1',
           payload.questionOrderNumber
         )
-        // let updatedQuestionList = state.questions
+        let updatedQuestionList = state.questions
 
         if (
           payload.questionOrderNumber === 1 &&
           selectedAnswerOrderNumber == '1'
         ) {
-          state.questions.map((question) => {
-            if (question.questionDisplayOrder === payload.questionOrderNumber) {
-              Object.assign(question, { display: false })
-            }
-          })
+          updatedQuestionList.splice(1, 3)
         }
         if (
           payload.questionOrderNumber === 14 &&
-          selectedAnswerOrderNumber == '1'
+          selectedAnswerOrderNumber == '2'
         ) {
+          updatedQuestionList = state.questions.filter(
+            (q) => q.questionDisplayOrder !== 15
+          )
+        }
+        if (
+          payload.questionOrderNumber === 23 &&
+          selectedAnswerOrderNumber == '2'
+        ) {
+          updatedQuestionList = state.questions.filter(
+            (q) =>
+              q.questionDisplayOrder !== 24 && q.questionDisplayOrder !== 25
+          )
         }
 
+        console.log(updatedQuestionList, 'fjiedksljkdsljksdl')
         return {
-          questions: [...state.questions],
+          questions: [...updatedQuestionList],
           answers: [...state.answers, payload],
         }
       }

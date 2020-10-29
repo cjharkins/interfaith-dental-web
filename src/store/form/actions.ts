@@ -21,10 +21,10 @@ export const getQuestions = (language: string) => async (
       },
     })
     const data = await questionAPI.json()
-    const questions = data.questions.map((q: any) =>
-      Object.assign(q, { display: true })
-    )
-    dispatch({ type: GET_QUESTIONS, payload: questions })
+    // const questions = data.questions.map((q: any) =>
+    //   Object.assign(q, { display: true })
+    // )
+    dispatch({ type: GET_QUESTIONS, payload: data })
   } catch (err) {
     console.log(err, 'There was an error.')
   } finally {

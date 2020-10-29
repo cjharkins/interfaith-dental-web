@@ -118,6 +118,7 @@ const Form: FC<ScrollViewProps> = ({
         return isPhone
       default:
         if (value.length > 0 && value !== '') {
+          console.log('in if')
           return true
         } else {
           return false
@@ -342,10 +343,9 @@ const Form: FC<ScrollViewProps> = ({
                 answerSelected,
                 questionDisplayOrder
               )
-              if (questionType !== 'freeText') {
-                setInformationalScreen()
-              }
+
               if (validated) {
+                console.log('valid?')
                 setError({
                   isError: false,
                   errorMessage: getErrorMessage(''),
@@ -356,8 +356,13 @@ const Form: FC<ScrollViewProps> = ({
                     answerSelected,
                   })
                 )
+                if (questionType !== 'freeText') {
+                  console.log('???', questionType)
+                  setInformationalScreen()
+                }
                 dispatch(updateCount(count))
               } else {
+                console.log('not valid?')
                 setError({
                   isError: true,
                   errorMessage: getErrorMessage(questionText),
