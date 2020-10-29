@@ -3,10 +3,11 @@ export interface AuthState {
   token: string
   isError: boolean
   error: string
+  apiKey: string
 }
 
 export interface LoginData {
-  user: string
+  username: string
   password: string
 }
 
