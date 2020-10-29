@@ -15,6 +15,5 @@ export const updateMessage = (message: string | undefined = '') => (
 export const setIsCountyCovered = (message: boolean) => (
   dispatch: (arg0: { type: string; payload: any }) => void
 ) => {
-  console.log(message, 'COUNTY')
   dispatch({ type: COVERED_COUNTY, payload: message })
 }

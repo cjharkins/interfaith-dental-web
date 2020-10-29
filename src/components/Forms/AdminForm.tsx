@@ -5,16 +5,22 @@ import {
   MenuItem,
   Select,
   TextField,
+  IconButton,
 } from '@material-ui/core'
-import { AnswerObjectProps, FormState } from '../store/form/types'
+import { AnswerObjectProps, FormState } from '../../store/form/types'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import { updateCount, updateMessage, setIsCountyCovered } from '../store/ui/actions'
-import { addAnswersToArray, handlePostForm } from '../store/form/actions'
-import { UIState } from '../store/ui/types'
+import EditIcon from '@material-ui/icons/Edit'
+import {
+  updateCount,
+  updateMessage,
+  setIsCountyCovered,
+} from '../../store/ui/actions'
+import { addAnswersToArray, handlePostForm } from '../../store/form/actions'
+import { UIState } from '../../store/ui/types'
 import { useDispatch, useSelector } from 'react-redux'
-import { useBreakpoint } from './MediaBreakpointProvider'
-import { RootState } from '../store'
+import { useBreakpoint } from '../MediaBreakpointProvider'
+import { RootState } from '../../store'
 
 export interface ScrollViewProps {
   count?: number | undefined
@@ -44,11 +50,10 @@ const Form: FC<ScrollViewProps> = ({
     questionType === 'freeText' ? '' : []
   )
 
-  const { isCoveredCounty } = useSelector<
-    RootState,
-    UIState
-    >((state) => state.ui)
-  
+  const { isCoveredCounty } = useSelector<RootState, UIState>(
+    (state) => state.ui
+  )
+
   const [error, setError] = useState<{
     isError: boolean
     errorMessage: string
@@ -67,30 +72,40 @@ const Form: FC<ScrollViewProps> = ({
   }
   const setInformationalScreen = () => {
     if (
-                questionDisplayOrder &&
-                questionDisplayOrder === 6 &&
-                answerChoices?.filter(a => a.answerText === answerSelected)[0].answerDisplayOrder.toString() === '10'
-              ) {
-                handlePostForm({ questions, answers })
-                dispatch(updateMessage('smileOn60'))
-              }
-              
-              const acceptedAnswers = ['3', '9', '12', '20', '23', '75', '76', '84', '95']
-              const answerChoiceOrder = answerChoices?.filter(a => a.answerText === answerSelected)[0].answerDisplayOrder.toString() || ''
-              const countyQuestion = [10, 11, 12]
-              if (questionDisplayOrder && countyQuestion.includes(questionDisplayOrder) &&
-                acceptedAnswers.includes(answerChoiceOrder) && isCoveredCounty == false) {
-                 dispatch(setIsCountyCovered(true))
-              }
-              if (
-                questionDisplayOrder &&
-                questionDisplayOrder === 13
-                && !isCoveredCounty && answerChoiceOrder === '1'
-              ) {
-                dispatch(updateMessage('oralHealth'))
-              }
+      questionDisplayOrder &&
+      questionDisplayOrder === 6 &&
+      answerChoices
+        ?.filter((a) => a.answerText === answerSelected)[0]
+        .answerDisplayOrder.toString() === '10'
+    ) {
+      handlePostForm({ questions, answers })
+      dispatch(updateMessage('smileOn60'))
+    }
+
+    const acceptedAnswers = ['3', '9', '12', '20', '23', '75', '76', '84', '95']
+    const answerChoiceOrder =
+      answerChoices
+        ?.filter((a) => a.answerText === answerSelected)[0]
+        .answerDisplayOrder.toString() || ''
+    const countyQuestion = [10, 11, 12]
+    if (
+      questionDisplayOrder &&
+      countyQuestion.includes(questionDisplayOrder) &&
+      acceptedAnswers.includes(answerChoiceOrder) &&
+      isCoveredCounty == false
+    ) {
+      dispatch(setIsCountyCovered(true))
+    }
+    if (
+      questionDisplayOrder &&
+      questionDisplayOrder === 13 &&
+      !isCoveredCounty &&
+      answerChoiceOrder === '1'
+    ) {
+      dispatch(updateMessage('oralHealth'))
+    }
   }
-  
+
   const validatePhone = (value: string): boolean => {
     return /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/g.test(value)
   }
@@ -129,12 +144,14 @@ const Form: FC<ScrollViewProps> = ({
     setAnswerSelected(value)
     return
   }
-  useEffect(() => {
-  }, [checked])
 
-  useEffect(() => {
-    // console.log(error)
-  }, [error])
+  const handleEditToggle = (event: any) => {
+    const id = event.target
+  }
+
+  useEffect(() => {}, [checked])
+
+  useEffect(() => {}, [error])
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -185,6 +202,17 @@ const Form: FC<ScrollViewProps> = ({
                 >
                   <p style={{ fontSize: breakpoints.sm ? '1.5em' : 36 }}>
                     {questionText}
+                    <IconButton
+                      style={{ float: 'right', padding: 0 }}
+                      onClick={handleEditToggle}
+                    >
+                      <EditIcon
+                        style={{
+                          height: 'auto',
+                          color: '#003B49',
+                        }}
+                      />
+                    </IconButton>
                   </p>
                   {questionType === 'freeText' && (
                     <TextField
@@ -221,7 +249,7 @@ const Form: FC<ScrollViewProps> = ({
                                 style={{
                                   display: 'flex',
                                   flexDirection: 'row',
-                                  justifyContent: 'flex-start',
+                                  justifyContent: 'space-between',
                                   alignContent: 'center',
                                   borderTop: '1px solid lightgrey',
                                   borderBottom:
@@ -232,17 +260,30 @@ const Form: FC<ScrollViewProps> = ({
                                   padding: '15px 0',
                                 }}
                               >
-                                <input
-                                  type="radio"
-                                  id={answerText
-                                    .replace(/\s/g, '')
-                                    .toLowerCase()}
-                                  onChange={() => {
-                                    setAnswerSelected(answerText)
-                                  }}
-                                  checked={answerSelected === answerText}
-                                />{' '}
-                                {answerText}
+                                <div>
+                                  <input
+                                    type="radio"
+                                    id={answerText
+                                      .replace(/\s/g, '')
+                                      .toLowerCase()}
+                                    onChange={() => {
+                                      setAnswerSelected(answerText)
+                                    }}
+                                    checked={answerSelected === answerText}
+                                  />{' '}
+                                  {answerText}
+                                </div>
+                                <IconButton
+                                  style={{ float: 'right', padding: 0 }}
+                                  onClick={handleEditToggle}
+                                >
+                                  <EditIcon
+                                    style={{
+                                      height: 'auto',
+                                      color: '#003B49',
+                                    }}
+                                  />
+                                </IconButton>
                               </div>
                             )
                           }
@@ -259,7 +300,6 @@ const Form: FC<ScrollViewProps> = ({
                         id="demo-simple-select"
                         value={answerSelected}
                         onChange={(e) => {
-                          
                           return handleChange(e, questionText)
                         }}
                         style={{ width: 400 }}
@@ -289,9 +329,8 @@ const Form: FC<ScrollViewProps> = ({
                         multiple
                         value={answerSelected}
                         onChange={(e) => {
-                          return  handleChangeMultiple
-                          }
-                        }
+                          return handleChangeMultiple
+                        }}
                         input={<Input />}
                         style={{ width: 400 }}
                       >
@@ -330,11 +369,11 @@ const Form: FC<ScrollViewProps> = ({
               //Validate if question has been answered
               //prevent scroll if invalid!
 
-              const validated = validateInput(answerSelected, questionDisplayOrder)
-              if (questionType !== 'freeText') {
-                
-                setInformationalScreen()
-              }
+              const validated = validateInput(
+                answerSelected,
+                questionDisplayOrder
+              )
+              setInformationalScreen()
               if (validated) {
                 setError({
                   isError: false,
@@ -353,7 +392,7 @@ const Form: FC<ScrollViewProps> = ({
                   errorMessage: getErrorMessage(questionText),
                 })
               }
-             
+
               if (lastOf) {
                 handlePostForm({ questions, answers })
                 return

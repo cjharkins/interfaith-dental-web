@@ -2,8 +2,16 @@ import React, { FC } from 'react'
 import Logo from './Logo'
 import { LanguageSelector } from './LanguageSelector'
 import { useBreakpoint } from './MediaBreakpointProvider'
+import { connect } from 'react-redux'
+import { AuthState } from '../store/auth/types'
 
-const Header: FC = ({ children }) => {
+import AuthButton from './AuthButton'
+
+interface HeaderProps {
+  auth?: AuthState | undefined
+}
+
+const Header: FC<HeaderProps> = ({ auth = {}, children }) => {
   const breakpoints: any = useBreakpoint()
 
   return (
@@ -33,13 +41,7 @@ const Header: FC = ({ children }) => {
         }}
       >
         <Logo showSmall={breakpoints.sm} />
-        <pre
-          style={{
-            order: 0,
-          }}
-        >
-          login
-        </pre>
+        <AuthButton />
         <LanguageSelector style={{ order: 2 }} />
       </div>
       {children}
@@ -47,4 +49,8 @@ const Header: FC = ({ children }) => {
   )
 }
 
-export default Header
+const mapStateToProps = (state: any) => {
+  return { auth: state.auth }
+}
+
+export default connect(mapStateToProps)(Header)

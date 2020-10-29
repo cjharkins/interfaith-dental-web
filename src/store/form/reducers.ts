@@ -26,7 +26,7 @@ export function formReducer(
       const isUpdate = answers.some(
         (question) => question.questionOrderNumber === questionOrderNumber
       )
-        console.log(answers, payload, state.questions )
+      console.log(answers, payload, state.questions)
       if (isUpdate) {
         const newState = state.answers.filter(
           (someAnswer) => someAnswer.questionOrderNumber !== questionOrderNumber
@@ -36,22 +36,41 @@ export function formReducer(
           answers: [...newState, payload],
         }
       } else {
-        const answerChoices = state.questions.filter(q => q.questionDisplayOrder === payload.questionOrderNumber)[0].answerChoices
-        console.log(answerChoices,' choices')
-        const selectedAnswerOrderNumber = answerChoices && answerChoices?.length > 0 && answerChoices?.filter(a => a.answerText === payload.answerSelected)[0].answerDisplayOrder || ''
-        console.log(selectedAnswerOrderNumber == '1', payload.questionOrderNumber)
-        let updatedQuestionList = state.questions
-                
-        if (payload.questionOrderNumber === 1 && selectedAnswerOrderNumber == '1') {
-             updatedQuestionList.splice(1, 3,)
+        const answerChoices = state.questions.filter(
+          (q) => q.questionDisplayOrder === payload.questionOrderNumber
+        )[0].answerChoices
+        console.log(answerChoices, ' choices')
+        const selectedAnswerOrderNumber =
+          (answerChoices &&
+            answerChoices?.length > 0 &&
+            answerChoices?.filter(
+              (a) => a.answerText === payload.answerSelected
+            )[0].answerDisplayOrder) ||
+          ''
+        console.log(
+          selectedAnswerOrderNumber == '1',
+          payload.questionOrderNumber
+        )
+        // let updatedQuestionList = state.questions
+
+        if (
+          payload.questionOrderNumber === 1 &&
+          selectedAnswerOrderNumber == '1'
+        ) {
+          state.questions.map((question) => {
+            if (question.questionDisplayOrder === payload.questionOrderNumber) {
+              Object.assign(question, { display: false })
+            }
+          })
         }
-        if (payload.questionOrderNumber === 14 && selectedAnswerOrderNumber == '1') {
-          
+        if (
+          payload.questionOrderNumber === 14 &&
+          selectedAnswerOrderNumber == '1'
+        ) {
         }
-        
-console.log(updatedQuestionList, 'fjiedksljkdsljksdl')
+
         return {
-          questions: [...updatedQuestionList],
+          questions: [...state.questions],
           answers: [...state.answers, payload],
         }
       }

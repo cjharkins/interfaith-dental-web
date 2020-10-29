@@ -21,7 +21,10 @@ export const getQuestions = (language: string) => async (
       },
     })
     const data = await questionAPI.json()
-    dispatch({ type: GET_QUESTIONS, payload: data })
+    const questions = data.questions.map((q: any) =>
+      Object.assign(q, { display: true })
+    )
+    dispatch({ type: GET_QUESTIONS, payload: questions })
   } catch (err) {
     console.log(err, 'There was an error.')
   } finally {
@@ -70,7 +73,7 @@ export const handlePostForm = (state: FormState) => {
   const model: any = {
     form: {
       ApplicantId: '475945903', // generate using date and applicant last name?
-      language:'English',
+      language: 'English',
       questions: [],
     },
   }
@@ -82,19 +85,16 @@ export const handlePostForm = (state: FormState) => {
         Array.isArray(answerSelected) &&
         answerSelected.map((option) => {
           return {
-            
-             
-              answerText: option,
-            
+            answerText: option,
           }
         })
       return {
         displayOrder: questionOrderNumber,
-        
+
         applicantChoices: [
           ...(multipleAnswers || [
             {
-                answerText: answerSelected,
+              answerText: answerSelected,
             },
           ]),
         ],
@@ -103,6 +103,7 @@ export const handlePostForm = (state: FormState) => {
   )
 
   model.form.questions = allAnswersGiven
+  console.log(JSON.stringify(model.form))
   fetch(serverUrl + 'forms', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
