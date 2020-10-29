@@ -5,6 +5,8 @@ import {
   AuthActionTypes,
   ADMIN_LOGOUT_ERROR,
   ADMIN_LOGIN_ERROR,
+  VALIDATION_SUCCESS,
+  VALIDATION_FAILURE,
 } from './types'
 
 const initialState: AuthState = {
@@ -24,7 +26,7 @@ export function authReducer(
         ...state,
         ...payload,
       }
-    case ADMIN_LOGOUT: 
+    case ADMIN_LOGOUT:
       return {
         ...state,
         ...payload,
@@ -35,6 +37,16 @@ export function authReducer(
         ...payload,
       }
     case ADMIN_LOGOUT_ERROR:
+      return {
+        ...state,
+        ...payload,
+      }
+    case VALIDATION_SUCCESS:
+      return {
+        ...state,
+        ...payload,
+      }
+    case VALIDATION_FAILURE:
       return {
         ...state,
         ...payload,
