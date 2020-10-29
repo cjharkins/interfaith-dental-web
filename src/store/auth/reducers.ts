@@ -1,28 +1,57 @@
-import { AuthState, ADMIN_LOGIN, ADMIN_LOGOUT, AuthActionTypes } from './types';
+import {
+  AuthState,
+  ADMIN_LOGIN,
+  ADMIN_LOGOUT,
+  AuthActionTypes,
+  ADMIN_LOGOUT_ERROR,
+  ADMIN_LOGIN_ERROR,
+  VALIDATION_SUCCESS,
+  VALIDATION_FAILURE,
+} from './types'
 
 const initialState: AuthState = {
-    loggedIn: false,
-    token: "string"
-};
+  loggedIn: false,
+  token: 'string',
+  isError: false,
+  error: '',
+}
 
 export function authReducer(
-    state = initialState,
-    action: AuthActionTypes
+  state = initialState,
+  { payload, type }: AuthActionTypes
 ): AuthState {
-    switch (action.type) {
-        case ADMIN_LOGIN: {
-            return {
-                ...state,
-                ...action.payload
-            };
-        }
-        case ADMIN_LOGOUT: {
-            return {
-                ...state,
-                ...action.payload
-            };
-        }
-        default:
-            return state;
-    }
+  switch (type) {
+    case ADMIN_LOGIN:
+      return {
+        ...state,
+        ...payload,
+      }
+    case ADMIN_LOGOUT:
+      return {
+        ...state,
+        ...payload,
+      }
+    case ADMIN_LOGIN_ERROR:
+      return {
+        ...state,
+        ...payload,
+      }
+    case ADMIN_LOGOUT_ERROR:
+      return {
+        ...state,
+        ...payload,
+      }
+    case VALIDATION_SUCCESS:
+      return {
+        ...state,
+        ...payload,
+      }
+    case VALIDATION_FAILURE:
+      return {
+        ...state,
+        ...payload,
+      }
+    default:
+      return state
+  }
 }
