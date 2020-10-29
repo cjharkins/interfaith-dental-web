@@ -9,7 +9,11 @@ import {
 import { AnswerObjectProps, FormState } from '../store/form/types'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import { updateCount, updateMessage, setIsCountyCovered } from '../store/ui/actions'
+import {
+  updateCount,
+  updateMessage,
+  setIsCountyCovered,
+} from '../store/ui/actions'
 import { addAnswersToArray, handlePostForm } from '../store/form/actions'
 import { UIState } from '../store/ui/types'
 import { useDispatch, useSelector } from 'react-redux'
@@ -44,11 +48,10 @@ const Form: FC<ScrollViewProps> = ({
     questionType === 'freeText' ? '' : []
   )
 
-  const { isCoveredCounty } = useSelector<
-    RootState,
-    UIState
-    >((state) => state.ui)
-  
+  const { isCoveredCounty } = useSelector<RootState, UIState>(
+    (state) => state.ui
+  )
+
   const [error, setError] = useState<{
     isError: boolean
     errorMessage: string
@@ -108,13 +111,9 @@ const Form: FC<ScrollViewProps> = ({
     setAnswerSelected(value)
     return
   }
-  useEffect(() => {
-    console.log('dispatch checked with selection of ' + checked)
-  }, [checked])
+  useEffect(() => {}, [checked])
 
-  useEffect(() => {
-    console.log(error)
-  }, [error])
+  useEffect(() => {}, [error])
 
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -239,7 +238,6 @@ const Form: FC<ScrollViewProps> = ({
                         id="demo-simple-select"
                         value={answerSelected}
                         onChange={(e) => {
-                          
                           return handleChange(e, questionText)
                         }}
                         style={{ width: 400 }}
@@ -269,9 +267,8 @@ const Form: FC<ScrollViewProps> = ({
                         multiple
                         value={answerSelected}
                         onChange={(e) => {
-                          return  handleChangeMultiple
-                          }
-                        }
+                          return handleChangeMultiple
+                        }}
                         input={<Input />}
                         style={{ width: 400 }}
                       >
@@ -322,29 +319,51 @@ const Form: FC<ScrollViewProps> = ({
               //Validate if question has been answered
               //prevent scroll if invalid!
 
-              const validated = validateInput(answerSelected, questionDisplayOrder)
+              const validated = validateInput(
+                answerSelected,
+                questionDisplayOrder
+              )
               if (
                 questionDisplayOrder &&
                 questionDisplayOrder === 6 &&
-                answerChoices?.filter(a => a.answerText === answerSelected)[0].answerDisplayOrder.toString() === '10'
+                answerChoices
+                  ?.filter((a) => a.answerText === answerSelected)[0]
+                  .answerDisplayOrder.toString() === '10'
               ) {
                 handlePostForm({ questions, answers })
                 dispatch(updateMessage('smileOn60'))
               }
               //County questions should be checked elsewhere.  after all 3 questions answered if no
               //counties Interfaith serves, updateMessage('oralHealth')
-              if (questionDisplayOrder && questionDisplayOrder === (10 || 11 || 12) &&
-                answerChoices?.filter(a => a.answerText === answerSelected)[0].answerDisplayOrder.toString() ===
-                ('3'|| '9' || '12' || '20' || '23' || '75' || '76' || '84'|| '95') && isCoveredCounty) {
-                 setIsCountyCovered(true)
+              if (
+                questionDisplayOrder &&
+                questionDisplayOrder === (10 || 11 || 12) &&
+                answerChoices
+                  ?.filter((a) => a.answerText === answerSelected)[0]
+                  .answerDisplayOrder.toString() ===
+                  ('3' ||
+                    '9' ||
+                    '12' ||
+                    '20' ||
+                    '23' ||
+                    '75' ||
+                    '76' ||
+                    '84' ||
+                    '95') &&
+                isCoveredCounty
+              ) {
+                setIsCountyCovered(true)
               }
               if (
                 questionDisplayOrder &&
-                questionDisplayOrder === 13
-                && !isCoveredCounty && answerChoices?.filter(a=> a.answerText === answerSelected)[0].answerDisplayOrder.toString() === '1'
+                questionDisplayOrder === 13 &&
+                !isCoveredCounty &&
+                answerChoices
+                  ?.filter((a) => a.answerText === answerSelected)[0]
+                  .answerDisplayOrder.toString() === '1'
               ) {
                 //postAnswers
-                console.log('boop',answers)
+                console.log('boop', answers)
                 dispatch(updateMessage('oralHealth'))
               }
 
@@ -366,7 +385,7 @@ const Form: FC<ScrollViewProps> = ({
                   errorMessage: getErrorMessage(questionText),
                 })
               }
-             
+
               if (lastOf) {
                 handlePostForm({ questions, answers })
                 return

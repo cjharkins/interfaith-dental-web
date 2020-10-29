@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
 import Header from '../components/Header'
-import ScrollView from '../components/ScrollView'
-import Form from '../components/Forms/Form'
+import Form from '../components/Form'
 import { ProgressBar } from '../components/ProgressBar'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
@@ -31,17 +30,16 @@ const Admin: FC = (props): JSX.Element => {
   }, [questionsComplete, informationType])
 
   const questionsAsComponents = [
-    ...questions.map((question) => (
-      <ScrollView
+    ...questions.map((question, index) => (
+      <Form
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
-      >
-        <Form
-          answerChoices={question.answerChoices}
-          questionText={question.questionText}
-          questionType={question.questionType}
-        />
-      </ScrollView>
+        answerChoices={question.answerChoices}
+        questionText={question.questionText}
+        questionDisplayOrder={question.questionDisplayOrder}
+        questionType={question.questionType}
+        lastOf={questions.length - 1 === index}
+      />
     )),
   ]
 
