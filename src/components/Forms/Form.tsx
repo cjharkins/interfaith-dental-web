@@ -339,7 +339,6 @@ const Form: FC<ScrollViewProps> = ({
                   questionType !== 'freeText' &&
                   questionType !== 'multipleSelect'
                 ) {
-                  console.log('im in here')
                   setInformationalScreen()
                 }
                 dispatch(updateCount(count))
@@ -351,21 +350,39 @@ const Form: FC<ScrollViewProps> = ({
               }
 
               if (lastOf) {
-                //get income answer and compare to # in family to set informationType to Thank you and qualified to
-                //true or false.
-                const incomeAnswer = answers.filter(
-                  (answer) => answer.questionOrderNumber === 32
-                )[0]
-                const incomeAnswerDisplayOrder = questions.filter(
-                  (question) => {
-                    if (question.questionDisplayOrder === 32) return question
-                  }
-                )
                 if (questionDisplayOrder === 33) {
-                  console.log(incomeAnswer, incomeAnswerDisplayOrder)
-                  // updatedQuestionList.splice(1, 3)
-                }
+                  const incomeAnswer = answers.filter(
+                    (answer) => answer.questionOrderNumber === 32
+                  )[0]
+                  const incomeQuestion =
+                    questions.filter((question) => {
+                      if (question.questionDisplayOrder === 32) return question
+                    })[0].answerChoices || []
+                  const incomeAnswerDisplayOrder = incomeQuestion.filter(
+                    (a) => {
+                      return a.answerText === incomeAnswer.answerSelected
+                    }
+                  )[0].answerDisplayOrder
 
+                  const incomeQualificationCheck = (
+                    income: any,
+                    familySize: any
+                  ) => {
+                    const matrix: { [key: string]: number[] } = {}
+                    for (var n = 0; n < 8; n++) {
+                      matrix[String(n + 1)] = [...Array(4 + n * 2).keys()].map(
+                        (k) => k + 1
+                      )
+                    }
+                    return matrix[familySize].some((i) => income === i)
+                  }
+
+                  const isQualified = incomeQualificationCheck(
+                    incomeAnswerDisplayOrder,
+                    answerSelected
+                  )
+                  dispatch(updateMessage('thankYou', isQualified))
+                }
                 handlePostForm({ questions, answers })
                 return
               } else {

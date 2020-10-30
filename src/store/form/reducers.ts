@@ -79,7 +79,6 @@ export function formReducer(
           }
         }
 
-        console.log(updatedQuestionList, 'fjiedksljkdsljksdl')
         return {
           questions: [...updatedQuestionList],
           answers: [...state.answers, payload],

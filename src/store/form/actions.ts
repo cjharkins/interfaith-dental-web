@@ -102,7 +102,6 @@ export const handlePostForm = (state: FormState) => {
   )
 
   model.form.questions = allAnswersGiven
-  console.log(JSON.stringify(model.form))
   fetch(serverUrl + 'forms', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
