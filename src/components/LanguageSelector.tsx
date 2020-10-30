@@ -20,8 +20,8 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({ style }) => {
   const [selectedOption, setSelectedOption] = useState('English')
 
   useEffect(() => {
-    dispatch(getQuestions())
-    console.log('fired api call')
+    dispatch(getQuestions(selectedOption))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOption])
 
   return (

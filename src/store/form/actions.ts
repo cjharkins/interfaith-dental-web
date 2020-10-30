@@ -1,12 +1,18 @@
-import { FormState, GET_QUESTIONS, POST_ANSWERS } from './types'
+import {
+  FormState,
+  GET_QUESTIONS,
+  ADD_ANSWERS_TO_ARRAY,
+  CustomerAnswers,
+} from './types'
 const serverUrl =
   'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'
 
-export const getQuestions = () => async (
+export const getQuestions = (language: string) => async (
   dispatch: (arg0: { type: string; payload: any }) => void
 ) => {
   try {
-    const questionAPI = await fetch(serverUrl + 'forms/english', {
+    const formattedLanguage = language === 'Español' ? 'Spanish' : language
+    const questionAPI = await fetch(serverUrl + `forms/${formattedLanguage}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -14,7 +20,9 @@ export const getQuestions = () => async (
       },
     })
     const data = await questionAPI.json()
-    console.log(data, 'data')
+    // const questions = data.questions.map((q: any) =>
+    //   Object.assign(q, { display: true })
+    // )
     dispatch({ type: GET_QUESTIONS, payload: data })
   } catch (err) {
     console.log(err, 'There was an error.')
@@ -36,10 +44,70 @@ export const postAnswers = (formData: FormState) => async (
       },
     })
     const data = await answerAPI.json()
-    dispatch({ type: POST_ANSWERS, payload: data })
   } catch (err) {
     console.log(err)
   } finally {
     return
   }
+}
+export const addAnswersToArray = (questionData: CustomerAnswers) => async (
+  dispatch: (arg0: { type: string; payload: CustomerAnswers }) => void
+) => {
+  dispatch({
+    type: ADD_ANSWERS_TO_ARRAY,
+    payload: questionData,
+  })
+}
+
+interface PostFormState {
+  form: {
+    applicant: {
+      id: string
+    }
+    questions: any[]
+  }
+}
+
+export const handlePostForm = (state: FormState) => {
+  const model: any = {
+    form: {
+      ApplicantId: '475945903', // generate using date and applicant last name?
+      language: 'English',
+      questions: [],
+    },
+  }
+
+  const allAnswersGiven: any[] = state.answers.map(
+    ({ questionOrderNumber, answerSelected }): any => {
+      const multipleAnswers =
+        answerSelected &&
+        Array.isArray(answerSelected) &&
+        answerSelected.map((option) => {
+          return {
+            answerText: option,
+          }
+        })
+      return {
+        displayOrder: questionOrderNumber,
+
+        applicantChoices: [
+          ...(multipleAnswers || [
+            {
+              answerText: answerSelected,
+            },
+          ]),
+        ],
+      }
+    }
+  )
+
+  model.form.questions = allAnswersGiven
+  console.log(JSON.stringify(model.form))
+  fetch(serverUrl + 'forms', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(model.form),
+  }).then((res) => {
+    console.log(res)
+  })
 }

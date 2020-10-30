@@ -161,7 +161,7 @@ const SmileOn60: FC = () => {
           }}
         >
           <Button style={{ background: '#F05033', color: 'white' }}>
-            <span style={{ padding: '5px 15px' }}>Go to Smile On 60+</span>
+            <a  style={{ textDecoration: 'none', color: 'white' }} href="https://interfaithdental.com/smile-on-60/"><span style={{ padding: '5px 15px' }}>Go to Smile On 60+</span></a>
           </Button>
         </div>
       </div>

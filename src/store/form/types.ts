@@ -1,9 +1,16 @@
-interface Answer {
-  answer: string
+export interface CustomerAnswers {
+  answerSelected: string | string[] | undefined
+  questionOrderNumber: number | undefined
 }
 
+export interface AnswerObjectProps {
+  answerText: string
+  answerType: string
+  answerDisplayOrder: string
+  questionDisplayOrder: string
+}
 interface Question {
-  answerChoices: [] | undefined
+  answerChoices: AnswerObjectProps[] | undefined
   questionDisplayOrder: number | undefined
   questionText: string | undefined
   questionType: string | undefined
@@ -11,20 +18,20 @@ interface Question {
 
 export interface FormState {
   questions: Question[]
-  answers: Answer[]
+  answers: CustomerAnswers[]
 }
 
 export const GET_QUESTIONS = 'GET_QUESTIONS'
-export const POST_ANSWERS = 'POST_ANSWERS'
+export const ADD_ANSWERS_TO_ARRAY = 'ADD_ANSWERS_TO_ARRAY'
 
 interface GetQuestionsAction {
   type: typeof GET_QUESTIONS
   payload: Question
 }
 
-interface PostAnswersAction {
-  type: typeof POST_ANSWERS
-  payload: FormState
+interface AddAnswersAction {
+  type: typeof ADD_ANSWERS_TO_ARRAY
+  payload: CustomerAnswers
 }
 
-export type FormActionTypes = GetQuestionsAction | PostAnswersAction
+export type FormActionTypes = GetQuestionsAction | AddAnswersAction

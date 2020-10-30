@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import React, { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AuthState } from '../store/auth/types'
 
@@ -13,20 +12,11 @@ interface AuthButtonProps {
   showLogin?: boolean | undefined
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    alert: {
-      margin: '.5em 0',
-    },
-  })
-)
-
 export const AuthButton: FC<AuthButtonProps> = ({ style = {} }) => {
   const { auth }: any = useSelector<AuthState | undefined>(({ auth }: any) => ({
     auth,
   }))
 
-  const classes = useStyles()
   const [showLogin, setShowLogin] = useState(false)
   const dispatch = useDispatch()
   let content

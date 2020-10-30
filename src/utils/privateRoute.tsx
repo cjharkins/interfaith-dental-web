@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { AuthState } from '../store/auth/types'
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,7 +21,6 @@ export const PrivateRoute: FC<ProtectRouteProps> = ({
   )
 
   useEffect(() => {
-    console.log(auth)
     const token = localStorage.getItem('interfaith-token')
     const parsedToken = token !== null ? JSON.parse(token) : {}
     const now = new Date()
@@ -34,7 +33,7 @@ export const PrivateRoute: FC<ProtectRouteProps> = ({
     } else {
       dispatch({ type: 'VALIDATION_FAILURE', payload: { loggedIn: false } })
     }
-  }, [])
+  })
 
   return auth && auth.loggedIn ? (
     <Route exact path={path} component={component} />

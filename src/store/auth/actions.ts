@@ -15,8 +15,6 @@ export const adminLogin = (loginData: LoginData) => async (
   // @PROD API ENDPOINT
   try {
     const { username, password } = loginData
-    console.log(username)
-    console.log(password)
     if (username !== 'interfaith') {
       dispatch({
         type: ADMIN_LOGIN_ERROR,

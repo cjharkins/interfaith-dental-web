@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
 import Header from '../components/Header'
 import { ProgressBar } from '../components/ProgressBar'
-import ScrollView from '../components/ScrollView'
 import Form from '../components/Forms/Form'
 import Informational from '../components/Informational/Informational'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
@@ -12,16 +11,32 @@ import { RootState } from '../store/index'
 
 const Public: FC = (props): JSX.Element => {
   const breakpoints: any = useBreakpoint()
-  const showInformational = false
+  let showInformational
 
   const [completed, setCompleted] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
 
-  const { questionsComplete = 0, informationType = '' } = useSelector<
+  const { questionsComplete = 0, informationType } = useSelector<
     RootState,
     UIState
   >((state) => state.ui)
-
+  const informationPageToDisplay = informationType.message
+  const qualified = informationType.qualified
+  console.log(informationType, 'typppppp')
+  switch (informationPageToDisplay) {
+    case 'smileOn60':
+      showInformational = true
+      break
+    case 'oralHealth':
+      showInformational = true
+      break
+    case 'thankYou':
+      showInformational = true
+      break
+    default:
+      showInformational = false
+      break
+  }
   const { questions } = useSelector<RootState, FormState>((state) => state.form)
 
   const getPercentage = (numCompleted: number, total: number) =>
@@ -30,25 +45,25 @@ const Public: FC = (props): JSX.Element => {
   useEffect(() => {
     setCompleted(getPercentage(questionsComplete, questions.length))
     setMessage(message)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionsComplete, informationType])
 
   const questionsAsComponents = [
     <Informational
-      key={'welcome'}
-      informationType="welcome"
-      didQualify={false}
+      key={informationPageToDisplay}
+      informationType={informationPageToDisplay}
+      didQualify={qualified}
     />,
-    ...questions.map((question) => (
-      <ScrollView
+    ...questions.map((question, index) => (
+      <Form
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
-      >
-        <Form
-          answerChoices={question.answerChoices}
-          questionText={question.questionText}
-          questionType={question.questionType}
-        />
-      </ScrollView>
+        answerChoices={question.answerChoices}
+        questionText={question.questionText}
+        questionDisplayOrder={question.questionDisplayOrder}
+        questionType={question.questionType}
+        lastOf={questions.length - 1 === index}
+      />
     )),
   ]
 
@@ -77,7 +92,7 @@ const Public: FC = (props): JSX.Element => {
       >
         {!showInformational && questionsAsComponents.map((form) => form)}
         {showInformational && (
-          <Informational informationType="smileOn60" didQualify={true} />
+          <Informational informationType={informationPageToDisplay} />
         )}
       </div>
     </div>

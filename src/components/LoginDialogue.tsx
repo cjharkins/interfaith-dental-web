@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import Dialog from '@material-ui/core/Dialog'
 import {
