@@ -49,7 +49,6 @@ const Public: FC = (props): JSX.Element => {
     setMessage(message)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionsComplete, informationType])
-
   const questionsAsComponents = [
     ...questions.map((question, index) => (
       <Form
