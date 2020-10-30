@@ -22,7 +22,6 @@ const Public: FC = (props): JSX.Element => {
   >((state) => state.ui)
   const informationPageToDisplay = informationType.message
   const qualified = informationType.qualified
-  console.log(informationType, 'typppppp')
   switch (informationPageToDisplay) {
     case 'smileOn60':
       showInformational = true
@@ -92,7 +91,10 @@ const Public: FC = (props): JSX.Element => {
       >
         {!showInformational && questionsAsComponents.map((form) => form)}
         {showInformational && (
-          <Informational informationType={informationPageToDisplay} />
+          <Informational
+            informationType={informationPageToDisplay}
+            didQualify={qualified}
+          />
         )}
       </div>
     </div>

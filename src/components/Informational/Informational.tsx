@@ -11,7 +11,7 @@ interface InformationalProps {
 
 const Informational: FC<InformationalProps> = ({
   informationType,
-  didQualify = false,
+  didQualify,
 }) => {
   const breakpoints: any = useBreakpoint()
   switch (informationType) {
@@ -161,7 +161,12 @@ const SmileOn60: FC = () => {
           }}
         >
           <Button style={{ background: '#F05033', color: 'white' }}>
-            <a  style={{ textDecoration: 'none', color: 'white' }} href="https://interfaithdental.com/smile-on-60/"><span style={{ padding: '5px 15px' }}>Go to Smile On 60+</span></a>
+            <a
+              style={{ textDecoration: 'none', color: 'white' }}
+              href="https://interfaithdental.com/smile-on-60/"
+            >
+              <span style={{ padding: '5px 15px' }}>Go to Smile On 60+</span>
+            </a>
           </Button>
         </div>
       </div>
