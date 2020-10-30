@@ -35,14 +35,13 @@ const Form: FC<ScrollViewProps> = ({
   questionType,
   questionDisplayOrder,
   count = 0,
-  lastOf = false,
+  lastOf,
 }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
   const { questions, answers } = useSelector<RootState, FormState>(
     ({ form }) => form
   )
-
   const [checked, setChecked] = useState<string>('')
   const [answerSelected, setAnswerSelected] = useState<any>(
     questionType === 'freeText' ? '' : []
@@ -142,7 +141,6 @@ const Form: FC<ScrollViewProps> = ({
     setAnswerSelected(value)
     return
   }
-  useEffect(() => {}, [checked])
 
   useEffect(() => {}, [error])
 
@@ -285,7 +283,6 @@ const Form: FC<ScrollViewProps> = ({
                         multiple
                         value={answerSelected}
                         onChange={(e) => {
-                          console.log(e)
                           return handleChangeMultiple(e)
                         }}
                         input={<Input />}
@@ -316,9 +313,6 @@ const Form: FC<ScrollViewProps> = ({
           <div
             id={`form${count}`}
             onClick={(): unknown => {
-              //Validate if question has been answered
-              //prevent scroll if invalid!
-
               const validated = validateInput(
                 answerSelected,
                 questionDisplayOrder
@@ -341,7 +335,52 @@ const Form: FC<ScrollViewProps> = ({
                 ) {
                   setInformationalScreen()
                 }
-                dispatch(updateCount(count))
+
+                if (questionType === 'singleSelect') {
+                  const selectedAnswerOrderNumber =
+                    (answerChoices &&
+                      answerChoices?.length > 0 &&
+                      answerChoices?.filter(
+                        (a) => a.answerText === answerSelected
+                      )[0].answerDisplayOrder) ||
+                    ''
+
+                  if (
+                    questionDisplayOrder === 1 &&
+                    selectedAnswerOrderNumber == '1'
+                  ) {
+                    dispatch(updateCount(4))
+                  } else if (
+                    questionDisplayOrder === 14 &&
+                    selectedAnswerOrderNumber == '2'
+                  ) {
+                    dispatch(updateCount(15))
+                    // updatedQuestionList = state.questions.filter(
+                    //   (q) => q.questionDisplayOrder !== 15
+                    // )
+                  } else if (
+                    questionDisplayOrder === 23 &&
+                    selectedAnswerOrderNumber == '2'
+                  ) {
+                    dispatch(updateCount(25))
+                    // updatedQuestionList = state.questions.filter(
+                    //   (q) =>
+                    //     q.questionDisplayOrder !== 24 && q.questionDisplayOrder !== 25
+                    // )
+                  } else if (
+                    questionDisplayOrder === 21 &&
+                    selectedAnswerOrderNumber == '2'
+                  ) {
+                    dispatch(updateCount(22))
+                    // updatedQuestionList = state.questions.filter(
+                    //   (q) => q.questionDisplayOrder !== 22
+                    // )
+                  } else {
+                    dispatch(updateCount(count))
+                  }
+                } else {
+                  dispatch(updateCount(count))
+                }
               } else {
                 setError({
                   isError: true,

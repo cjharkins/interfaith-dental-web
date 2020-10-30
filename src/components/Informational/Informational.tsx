@@ -1,6 +1,8 @@
 import React, { FC } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { Button } from '@material-ui/core'
+import { updateMessage } from '../../store/ui/actions'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useBreakpoint } from '../MediaBreakpointProvider'
 
@@ -8,11 +10,11 @@ interface InformationalProps {
   informationType: string | undefined
   didQualify?: boolean | undefined
 }
-
 const Informational: FC<InformationalProps> = ({
   informationType,
   didQualify,
 }) => {
+  const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
   switch (informationType) {
     case 'smileOn60':
@@ -49,6 +51,10 @@ const Informational: FC<InformationalProps> = ({
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
+                }}
+                onClick={() => {
+                  dispatch(updateMessage('', false))
+                  return
                 }}
               >
                 <div style={{ margin: '0 auto', color: 'white' }}>

@@ -16,10 +16,11 @@ const Public: FC = (props): JSX.Element => {
   const [completed, setCompleted] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
 
-  const { questionsComplete = 0, informationType } = useSelector<
-    RootState,
-    UIState
-  >((state) => state.ui)
+  const {
+    questionsComplete = 0,
+    informationType,
+    questionLength,
+  } = useSelector<RootState, UIState>((state) => state.ui)
   const informationPageToDisplay = informationType.message
   const qualified = informationType.qualified
   switch (informationPageToDisplay) {
@@ -32,6 +33,9 @@ const Public: FC = (props): JSX.Element => {
     case 'thankYou':
       showInformational = true
       break
+    case 'welcome':
+      showInformational = true
+      break
     default:
       showInformational = false
       break
@@ -40,19 +44,12 @@ const Public: FC = (props): JSX.Element => {
 
   const getPercentage = (numCompleted: number, total: number) =>
     Math.ceil((numCompleted / total) * 100)
-
   useEffect(() => {
-    setCompleted(getPercentage(questionsComplete, questions.length))
+    setCompleted(getPercentage(questionsComplete, questionLength))
     setMessage(message)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionsComplete, informationType])
-
   const questionsAsComponents = [
-    <Informational
-      key={informationPageToDisplay}
-      informationType={informationPageToDisplay}
-      didQualify={qualified}
-    />,
     ...questions.map((question, index) => (
       <Form
         key={'n' + question.questionDisplayOrder}
@@ -89,7 +86,7 @@ const Public: FC = (props): JSX.Element => {
           marginTop: breakpoints.sm ? 178 : 128,
         }}
       >
-        {!showInformational && questionsAsComponents.map((form) => form)}
+        {!showInformational && questionsAsComponents[questionsComplete]}
         {showInformational && (
           <Informational
             informationType={informationPageToDisplay}

@@ -4,8 +4,11 @@ import {
   ADD_ANSWERS_TO_ARRAY,
   CustomerAnswers,
 } from './types'
+import { QUESTIONS_LENGTH } from '../ui/types';
 const serverUrl =
-  'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'
+'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'
+const { v4: uuidv4 } = require('uuid');
+
 
 export const getQuestions = (language: string) => async (
   dispatch: (arg0: { type: string; payload: any }) => void
@@ -20,9 +23,8 @@ export const getQuestions = (language: string) => async (
       },
     })
     const data = await questionAPI.json()
-    // const questions = data.questions.map((q: any) =>
-    //   Object.assign(q, { display: true })
-    // )
+
+    dispatch({ type: QUESTIONS_LENGTH, payload: data.questions.length })
     dispatch({ type: GET_QUESTIONS, payload: data })
   } catch (err) {
     console.log(err, 'There was an error.')
@@ -71,7 +73,7 @@ interface PostFormState {
 export const handlePostForm = (state: FormState) => {
   const model: any = {
     form: {
-      ApplicantId: '475945903', // generate using date and applicant last name?
+      ApplicantId: uuidv4(), // generate using date and applicant last name?
       language: 'English',
       questions: [],
     },
