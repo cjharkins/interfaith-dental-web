@@ -42,7 +42,6 @@ const Form: FC<ScrollViewProps> = ({
   const { questions, answers } = useSelector<RootState, FormState>(
     ({ form }) => form
   )
-
   const [checked, setChecked] = useState<string>('')
   const [answerSelected, setAnswerSelected] = useState<any>(
     questionType === 'freeText' ? '' : []
@@ -142,7 +141,6 @@ const Form: FC<ScrollViewProps> = ({
     setAnswerSelected(value)
     return
   }
-  useEffect(() => {}, [checked])
 
   useEffect(() => {}, [error])
 
@@ -285,7 +283,6 @@ const Form: FC<ScrollViewProps> = ({
                         multiple
                         value={answerSelected}
                         onChange={(e) => {
-                          console.log(e)
                           return handleChangeMultiple(e)
                         }}
                         input={<Input />}
@@ -316,15 +313,13 @@ const Form: FC<ScrollViewProps> = ({
           <div
             id={`form${count}`}
             onClick={(): unknown => {
-              //Validate if question has been answered
-              //prevent scroll if invalid!
-
               const validated = validateInput(
                 answerSelected,
                 questionDisplayOrder
               )
 
               if (validated) {
+                
                 setError({
                   isError: false,
                   errorMessage: getErrorMessage(''),
@@ -339,7 +334,6 @@ const Form: FC<ScrollViewProps> = ({
                   questionType !== 'freeText' &&
                   questionType !== 'multipleSelect'
                 ) {
-                  console.log('im in here')
                   setInformationalScreen()
                 }
                 dispatch(updateCount(count))
@@ -362,8 +356,6 @@ const Form: FC<ScrollViewProps> = ({
                   }
                 )
                 if (questionDisplayOrder === 33) {
-                  console.log(incomeAnswer, incomeAnswerDisplayOrder)
-                  // updatedQuestionList.splice(1, 3)
                 }
 
                 handlePostForm({ questions, answers })
