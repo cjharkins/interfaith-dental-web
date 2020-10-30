@@ -16,13 +16,13 @@ const Public: FC = (props): JSX.Element => {
   const [completed, setCompleted] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
 
-  const { questionsComplete = 0, informationType, questionLength } = useSelector<
-    RootState,
-    UIState
-  >((state) => state.ui)
+  const {
+    questionsComplete = 0,
+    informationType,
+    questionLength,
+  } = useSelector<RootState, UIState>((state) => state.ui)
   const informationPageToDisplay = informationType.message
   const qualified = informationType.qualified
-
   switch (informationPageToDisplay) {
     case 'smileOn60':
       showInformational = true
@@ -89,7 +89,10 @@ const Public: FC = (props): JSX.Element => {
       >
         {!showInformational && questionsAsComponents[questionsComplete]}
         {showInformational && (
-          <Informational informationType={informationPageToDisplay} />
+          <Informational
+            informationType={informationPageToDisplay}
+            didQualify={qualified}
+          />
         )}
       </div>
     </div>

@@ -12,7 +12,7 @@ interface InformationalProps {
 }
 const Informational: FC<InformationalProps> = ({
   informationType,
-  didQualify = false,
+  didQualify,
 }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
@@ -55,16 +55,13 @@ const Informational: FC<InformationalProps> = ({
                 onClick={() => {
                   dispatch(updateMessage('', false))
                   return
-                }
-
-                }
+                }}
               >
                 <div style={{ margin: '0 auto', color: 'white' }}>
                   GET STARTED
                 </div>
                 <div style={{ margin: '0 auto' }}>
-                  <ExpandMoreIcon style={{ color: 'white' }}
-                  />
+                  <ExpandMoreIcon style={{ color: 'white' }} />
                 </div>
               </div>
             </a>
@@ -170,7 +167,12 @@ const SmileOn60: FC = () => {
           }}
         >
           <Button style={{ background: '#F05033', color: 'white' }}>
-            <a  style={{ textDecoration: 'none', color: 'white' }} href="https://interfaithdental.com/smile-on-60/"><span style={{ padding: '5px 15px' }}>Go to Smile On 60+</span></a>
+            <a
+              style={{ textDecoration: 'none', color: 'white' }}
+              href="https://interfaithdental.com/smile-on-60/"
+            >
+              <span style={{ padding: '5px 15px' }}>Go to Smile On 60+</span>
+            </a>
           </Button>
         </div>
       </div>
