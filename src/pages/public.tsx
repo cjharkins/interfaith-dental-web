@@ -20,8 +20,10 @@ const Public: FC = (props): JSX.Element => {
     RootState,
     UIState
   >((state) => state.ui)
-
-  switch (informationType) {
+  const informationPageToDisplay = informationType.message
+  const qualified = informationType.qualified
+  console.log(informationType, 'typppppp')
+  switch (informationPageToDisplay) {
     case 'smileOn60':
       showInformational = true
       break
@@ -43,13 +45,14 @@ const Public: FC = (props): JSX.Element => {
   useEffect(() => {
     setCompleted(getPercentage(questionsComplete, questions.length))
     setMessage(message)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionsComplete, informationType])
 
   const questionsAsComponents = [
     <Informational
-      key={informationType}
-      informationType={informationType}
-      didQualify={false}
+      key={informationPageToDisplay}
+      informationType={informationPageToDisplay}
+      didQualify={qualified}
     />,
     ...questions.map((question, index) => (
       <Form
@@ -89,7 +92,7 @@ const Public: FC = (props): JSX.Element => {
       >
         {!showInformational && questionsAsComponents.map((form) => form)}
         {showInformational && (
-          <Informational informationType={informationType} />
+          <Informational informationType={informationPageToDisplay} />
         )}
       </div>
     </div>

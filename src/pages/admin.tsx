@@ -27,6 +27,7 @@ const Admin: FC = (props): JSX.Element => {
   useEffect(() => {
     setCompleted(getPercentage(questionsComplete, 10))
     setMessage(message)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionsComplete, informationType])
 
   const questionsAsComponents = [

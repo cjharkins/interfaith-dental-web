@@ -79,7 +79,7 @@ const Form: FC<ScrollViewProps> = ({
         .answerDisplayOrder.toString() === '10'
     ) {
       handlePostForm({ questions, answers })
-      dispatch(updateMessage('smileOn60'))
+      dispatch(updateMessage('smileOn60', false))
     }
 
     const acceptedAnswers = ['3', '9', '12', '20', '23', '75', '76', '84', '95']
@@ -102,7 +102,7 @@ const Form: FC<ScrollViewProps> = ({
       !isCoveredCounty &&
       answerChoiceOrder === '1'
     ) {
-      dispatch(updateMessage('oralHealth'))
+      dispatch(updateMessage('oralHealth', false))
     }
   }
 

@@ -3,7 +3,6 @@ import {
   GET_QUESTIONS,
   ADD_ANSWERS_TO_ARRAY,
   CustomerAnswers,
-  FormActionTypes,
 } from './types'
 const serverUrl =
   'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'

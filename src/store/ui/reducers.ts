@@ -7,7 +7,7 @@ import {
 } from './types'
 
 const initialState: UIState = {
-  informationType: 'welcome',
+  informationType: { message: 'welcome', qualified: false },
   questionsComplete: 0,
   isCoveredCounty: false,
 }
@@ -31,7 +31,7 @@ export function uiReducer(
       return {
         ...state,
         isCoveredCounty: payload,
-  }
+      }
     default:
       return state
   }

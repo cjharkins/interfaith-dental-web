@@ -1,7 +1,11 @@
 export interface UIState {
-  informationType: string | undefined
+  informationType: informationTypeProps
   questionsComplete: number | undefined
-  isCoveredCounty: boolean 
+  isCoveredCounty: boolean
+}
+export interface informationTypeProps {
+  message: string
+  qualified: boolean
 }
 
 export const QUESTIONS_COMPLETE = 'QUESTIONS_COMPLETE'

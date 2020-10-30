@@ -77,7 +77,7 @@ const Form: FC<ScrollViewProps> = ({
         .answerDisplayOrder.toString() === '10'
     ) {
       handlePostForm({ questions, answers })
-      dispatch(updateMessage('smileOn60'))
+      dispatch(updateMessage('smileOn60', false))
     }
 
     const acceptedAnswers = ['3', '9', '12', '20', '23', '75', '76', '84', '95']
@@ -100,7 +100,7 @@ const Form: FC<ScrollViewProps> = ({
       !isCoveredCounty &&
       answerChoiceOrder === '1'
     ) {
-      dispatch(updateMessage('oralHealth'))
+      dispatch(updateMessage('oralHealth', false))
     }
   }
 
@@ -118,7 +118,6 @@ const Form: FC<ScrollViewProps> = ({
         return isPhone
       default:
         if (value.length > 0 && value !== '') {
-          console.log('in if')
           return true
         } else {
           return false
@@ -219,45 +218,39 @@ const Form: FC<ScrollViewProps> = ({
                     <div style={{ width: '100%', fontSize: 14 }}>
                       {answerChoices !== undefined &&
                         answerChoices.length > 0 &&
-                        answerChoices.map(
-                          ({
-                            answerText,
-                            answerType,
-                            answerDisplayOrder,
-                            questionDisplayOrder,
-                          }) => {
-                            return (
-                              <div
-                                key={answerText}
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'row',
-                                  justifyContent: 'flex-start',
-                                  alignContent: 'center',
-                                  borderTop: '1px solid lightgrey',
-                                  borderBottom:
-                                    answerText === 'Case Worker'
-                                      ? '1px solid lightgrey'
-                                      : 'none',
-                                  width: '100%',
-                                  padding: '15px 0',
+                        answerChoices.map(({ answerText }) => {
+                          return (
+                            <div
+                              key={answerText}
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignContent: 'center',
+                                borderTop: '1px solid lightgrey',
+                                borderBottom:
+                                  answerText === 'Case Worker'
+                                    ? '1px solid lightgrey'
+                                    : 'none',
+                                width: '100%',
+                                padding: '15px 0',
+                              }}
+                            >
+                              <input
+                                type="radio"
+                                id={
+                                  answerText.replace(/\s/g, '').toLowerCase() +
+                                  Math.random()
+                                }
+                                onChange={() => {
+                                  setAnswerSelected(answerText)
                                 }}
-                              >
-                                <input
-                                  type="radio"
-                                  id={answerText
-                                    .replace(/\s/g, '')
-                                    .toLowerCase()}
-                                  onChange={() => {
-                                    setAnswerSelected(answerText)
-                                  }}
-                                  checked={answerSelected === answerText}
-                                />{' '}
-                                {answerText}
-                              </div>
-                            )
-                          }
-                        )}
+                                checked={answerSelected === answerText}
+                              />{' '}
+                              {answerText}
+                            </div>
+                          )
+                        })}
                     </div>
                   )}
                   {questionType === 'dropDown' && (
@@ -276,18 +269,11 @@ const Form: FC<ScrollViewProps> = ({
                       >
                         {answerChoices !== undefined &&
                           answerChoices.length > 0 &&
-                          answerChoices.map(
-                            ({
-                              answerText,
-                              answerType,
-                              answerDisplayOrder,
-                              questionDisplayOrder,
-                            }) => (
-                              <MenuItem key={answerText} value={answerText}>
-                                {answerText}
-                              </MenuItem>
-                            )
-                          )}
+                          answerChoices.map(({ answerText }) => (
+                            <MenuItem key={answerText} value={answerText}>
+                              {answerText}
+                            </MenuItem>
+                          ))}
                       </Select>
                     </div>
                   )}
@@ -299,27 +285,21 @@ const Form: FC<ScrollViewProps> = ({
                         multiple
                         value={answerSelected}
                         onChange={(e) => {
-                          return handleChangeMultiple
+                          console.log(e)
+                          return handleChangeMultiple(e)
                         }}
                         input={<Input />}
                         style={{ width: 400 }}
                       >
                         {answerChoices !== undefined &&
                           answerChoices.length > 0 &&
-                          answerChoices.map(
-                            ({
-                              answerText,
-                              answerType,
-                              answerDisplayOrder,
-                              questionDisplayOrder,
-                            }) => {
-                              return (
-                                <MenuItem key={answerText} value={answerText}>
-                                  {answerText}
-                                </MenuItem>
-                              )
-                            }
-                          )}
+                          answerChoices.map(({ answerText }) => {
+                            return (
+                              <MenuItem key={answerText} value={answerText}>
+                                {answerText}
+                              </MenuItem>
+                            )
+                          })}
                       </Select>
                     </div>
                   )}
@@ -345,7 +325,6 @@ const Form: FC<ScrollViewProps> = ({
               )
 
               if (validated) {
-                console.log('valid?')
                 setError({
                   isError: false,
                   errorMessage: getErrorMessage(''),
@@ -356,13 +335,15 @@ const Form: FC<ScrollViewProps> = ({
                     answerSelected,
                   })
                 )
-                if (questionType !== 'freeText') {
-                  console.log('???', questionType)
+                if (
+                  questionType !== 'freeText' &&
+                  questionType !== 'multipleSelect'
+                ) {
+                  console.log('im in here')
                   setInformationalScreen()
                 }
                 dispatch(updateCount(count))
               } else {
-                console.log('not valid?')
                 setError({
                   isError: true,
                   errorMessage: getErrorMessage(questionText),
@@ -370,6 +351,21 @@ const Form: FC<ScrollViewProps> = ({
               }
 
               if (lastOf) {
+                //get income answer and compare to # in family to set informationType to Thank you and qualified to
+                //true or false.
+                const incomeAnswer = answers.filter(
+                  (answer) => answer.questionOrderNumber === 32
+                )[0]
+                const incomeAnswerDisplayOrder = questions.filter(
+                  (question) => {
+                    if (question.questionDisplayOrder === 32) return question
+                  }
+                )
+                if (questionDisplayOrder === 33) {
+                  console.log(incomeAnswer, incomeAnswerDisplayOrder)
+                  // updatedQuestionList.splice(1, 3)
+                }
+
                 handlePostForm({ questions, answers })
                 return
               } else {

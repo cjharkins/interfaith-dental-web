@@ -21,6 +21,7 @@ export const LanguageSelector: FC<LanguageSelectorProps> = ({ style }) => {
 
   useEffect(() => {
     dispatch(getQuestions(selectedOption))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOption])
 
   return (
