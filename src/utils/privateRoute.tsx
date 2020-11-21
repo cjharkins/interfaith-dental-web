@@ -33,7 +33,7 @@ export const PrivateRoute: FC<ProtectRouteProps> = ({
     } else {
       dispatch({ type: 'VALIDATION_FAILURE', payload: { loggedIn: false } })
     }
-  })
+  }, [])
 
   return auth && auth.loggedIn ? (
     <Route exact path={path} component={component} />

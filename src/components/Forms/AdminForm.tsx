@@ -164,7 +164,6 @@ const Form: FC<ScrollViewProps> = ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        paddingBottom: breakpoints.sm ? 170 : 128,
       }}
     >
       <div style={{ height: '100%', width: '100%' }}>
@@ -184,7 +183,7 @@ const Form: FC<ScrollViewProps> = ({
               background: 'white',
             }}
           >
-            <QuestionHeader count={count} />
+            <QuestionHeader count={count} description={questionType} />
             <div style={{ padding: '0 30px 30px' }}>
               <div
                 style={{
@@ -200,37 +199,21 @@ const Form: FC<ScrollViewProps> = ({
                     flexDirection: 'column',
                   }}
                 >
-                  <p style={{ fontSize: breakpoints.sm ? '1.5em' : 36 }}>
-                    {questionText}
-                    <IconButton
-                      style={{ float: 'right', padding: 0 }}
-                      onClick={handleEditToggle}
-                    >
-                      <EditIcon
-                        style={{
-                          height: 'auto',
-                          color: '#003B49',
-                        }}
-                      />
-                    </IconButton>
-                  </p>
-                  {questionType === 'freeText' && (
-                    <TextField
-                      error={error.isError}
-                      helperText={error.errorMessage}
-                      className={((questionText || 'unknown') + count)
-                        .replace(/\s/g, '')
-                        .replace(':', '')
-                        .toLowerCase()}
-                      style={{ width: '80%', maxWidth: 400, margin: '20px 0' }}
-                      id="outlined-basic"
-                      variant="outlined"
-                      label={'Please enter your answer here.'}
-                      type={'text'}
-                      onChange={(e) => {
-                        return handleChange(e, questionText)
-                      }}
-                    />
+                  <div style={{ marginTop: '1rem' }}>Question</div>
+                  <TextField
+                    style={{
+                      fontSize: breakpoints.sm ? '1.5em' : 36,
+                      marginTop: '1rem',
+                    }}
+                    defaultValue={questionText}
+                    variant="outlined"
+                    fullWidth
+                    required
+                  ></TextField>
+                  {questionType !== 'freeText' ? (
+                    <div style={{ marginTop: '1rem' }}>Answers</div>
+                  ) : (
+                    <></>
                   )}
                   {questionType === 'singleSelect' && (
                     <div style={{ width: '100%', fontSize: 14 }}>
@@ -244,47 +227,14 @@ const Form: FC<ScrollViewProps> = ({
                             questionDisplayOrder,
                           }) => {
                             return (
-                              <div
+                              <TextField
+                                fullWidth
+                                style={{ display: 'block', marginTop: '1rem' }}
                                 key={answerText}
-                                style={{
-                                  display: 'flex',
-                                  flexDirection: 'row',
-                                  justifyContent: 'space-between',
-                                  alignContent: 'center',
-                                  borderTop: '1px solid lightgrey',
-                                  borderBottom:
-                                    answerText === 'Case Worker'
-                                      ? '1px solid lightgrey'
-                                      : 'none',
-                                  width: '100%',
-                                  padding: '15px 0',
-                                }}
-                              >
-                                <div>
-                                  <input
-                                    type="radio"
-                                    id={answerText
-                                      .replace(/\s/g, '')
-                                      .toLowerCase()}
-                                    onChange={() => {
-                                      setAnswerSelected(answerText)
-                                    }}
-                                    checked={answerSelected === answerText}
-                                  />{' '}
-                                  {answerText}
-                                </div>
-                                <IconButton
-                                  style={{ float: 'right', padding: 0 }}
-                                  onClick={handleEditToggle}
-                                >
-                                  <EditIcon
-                                    style={{
-                                      height: 'auto',
-                                      color: '#003B49',
-                                    }}
-                                  />
-                                </IconButton>
-                              </div>
+                                defaultValue={answerText}
+                                required
+                                variant="outlined"
+                              ></TextField>
                             )
                           }
                         )}
@@ -292,65 +242,50 @@ const Form: FC<ScrollViewProps> = ({
                   )}
                   {questionType === 'dropDown' && (
                     <div style={{ width: '100%', fontSize: 14 }}>
-                      <InputLabel id="demo-simple-select-label">
-                        Please Select One
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={answerSelected}
-                        onChange={(e) => {
-                          return handleChange(e, questionText)
-                        }}
-                        style={{ width: 400 }}
-                      >
-                        {answerChoices !== undefined &&
-                          answerChoices.length > 0 &&
-                          answerChoices.map(
-                            ({
-                              answerText,
-                              answerType,
-                              answerDisplayOrder,
-                              questionDisplayOrder,
-                            }) => (
-                              <MenuItem key={answerText} value={answerText}>
-                                {answerText}
-                              </MenuItem>
-                            )
-                          )}
-                      </Select>
+                      {answerChoices !== undefined &&
+                        answerChoices.length > 0 &&
+                        answerChoices.map(
+                          ({
+                            answerText,
+                            answerType,
+                            answerDisplayOrder,
+                            questionDisplayOrder,
+                          }) => (
+                            <TextField
+                              fullWidth
+                              style={{ display: 'block', marginTop: '1rem' }}
+                              key={answerText}
+                              defaultValue={answerText}
+                              required
+                              variant="outlined"
+                            ></TextField>
+                          )
+                        )}
                     </div>
                   )}
                   {questionType === 'multipleSelect' && (
                     <div style={{ width: '100%', fontSize: 14 }}>
-                      <Select
-                        labelId={questionText}
-                        id={questionText}
-                        multiple
-                        value={answerSelected}
-                        onChange={(e) => {
-                          return handleChangeMultiple
-                        }}
-                        input={<Input />}
-                        style={{ width: 400 }}
-                      >
-                        {answerChoices !== undefined &&
-                          answerChoices.length > 0 &&
-                          answerChoices.map(
-                            ({
-                              answerText,
-                              answerType,
-                              answerDisplayOrder,
-                              questionDisplayOrder,
-                            }) => {
-                              return (
-                                <MenuItem key={answerText} value={answerText}>
-                                  {answerText}
-                                </MenuItem>
-                              )
-                            }
-                          )}
-                      </Select>
+                      {answerChoices !== undefined &&
+                        answerChoices.length > 0 &&
+                        answerChoices.map(
+                          ({
+                            answerText,
+                            answerType,
+                            answerDisplayOrder,
+                            questionDisplayOrder,
+                          }) => {
+                            return (
+                              <TextField
+                                fullWidth
+                                style={{ display: 'block', marginTop: '1rem' }}
+                                key={answerText}
+                                defaultValue={answerText}
+                                required
+                                variant="outlined"
+                              ></TextField>
+                            )
+                          }
+                        )}
                     </div>
                   )}
                 </div>
@@ -358,77 +293,6 @@ const Form: FC<ScrollViewProps> = ({
             </div>
           </div>
         </div>
-        <a
-          style={{ textDecoration: 'none' }}
-          // href={valid ? `#view${count}` : `#view${count - 1}`}
-          href={`#view${count}`}
-        >
-          <div
-            id={`form${count}`}
-            onClick={(): unknown => {
-              //Validate if question has been answered
-              //prevent scroll if invalid!
-
-              const validated = validateInput(
-                answerSelected,
-                questionDisplayOrder
-              )
-              setInformationalScreen()
-              if (validated) {
-                setError({
-                  isError: false,
-                  errorMessage: getErrorMessage(''),
-                })
-                dispatch(
-                  addAnswersToArray({
-                    questionOrderNumber: count,
-                    answerSelected,
-                  })
-                )
-                dispatch(updateCount(count))
-              } else {
-                setError({
-                  isError: true,
-                  errorMessage: getErrorMessage(questionText),
-                })
-              }
-
-              if (lastOf) {
-                handlePostForm({ questions, answers })
-                return
-              } else {
-                return
-              }
-            }}
-            style={{
-              width: '116px',
-              height: 'max-content',
-              background: 'white',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              padding: 0,
-              margin: '0 auto',
-            }}
-          >
-            <div style={{ margin: '0 auto', color: '#003B49' }}>
-              {lastOf ? 'SUBMIT' : 'NEXT'}
-            </div>
-            {lastOf ? (
-              <div />
-            ) : (
-              <div style={{ margin: '-10px auto 0' }}>
-                <ExpandMoreIcon
-                  style={{
-                    width: 45,
-                    height: 'auto',
-                    color: '#003B49',
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        </a>
       </div>
       <div ref={scrollRef} id={`view${count ? count : 0}`} />
     </div>
@@ -437,9 +301,13 @@ const Form: FC<ScrollViewProps> = ({
 
 interface QuestionHeaderProps {
   count: number | undefined
+  description: string | undefined
 }
 
-const QuestionHeader: FC<QuestionHeaderProps> = ({ count = 1 }) => {
+const QuestionHeader: FC<QuestionHeaderProps> = ({
+  count = 1,
+  description,
+}) => {
   const breakpoints: any = useBreakpoint()
   return (
     <div
@@ -458,20 +326,10 @@ const QuestionHeader: FC<QuestionHeaderProps> = ({ count = 1 }) => {
           alignItems: 'center',
         }}
       >
-        <a href={`#view${count === 1 ? 'Top' : count - 2}`}>
-          <ExpandLessIcon
-            style={{
-              marginTop: 15,
-              width: 38,
-              height: 'auto',
-              color: '#003B49',
-            }}
-          />
-        </a>
         <div style={{ width: '100%' }}>
-          <div style={{ borderBottom: '2px solid #EE2737', width: 120 }}>
+          <div style={{ borderBottom: '2px solid #EE2737', width: '50%' }}>
             <h3 style={{ fontSize: breakpoints.sm ? '1.5em' : 36 }}>
-              {count}.
+              {count}. ({description})
             </h3>
           </div>
         </div>

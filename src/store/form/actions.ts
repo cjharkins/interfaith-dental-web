@@ -4,11 +4,10 @@ import {
   ADD_ANSWERS_TO_ARRAY,
   CustomerAnswers,
 } from './types'
-import { QUESTIONS_LENGTH } from '../ui/types';
+import { QUESTIONS_LENGTH } from '../ui/types'
 const serverUrl =
-'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'
-const { v4: uuidv4 } = require('uuid');
-
+  'https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/'
+const { v4: uuidv4 } = require('uuid')
 
 export const getQuestions = (language: string) => async (
   dispatch: (arg0: { type: string; payload: any }) => void
