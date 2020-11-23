@@ -166,6 +166,10 @@ const Form: FC<ScrollViewProps> = ({
         flexDirection: 'column',
       }}
     >
+      <span
+        style={{ position: 'relative', top: '-128px' }}
+        id={`view${questionDisplayOrder}`}
+      ></span>
       <div style={{ height: '100%', width: '100%' }}>
         <div
           style={{
@@ -294,7 +298,6 @@ const Form: FC<ScrollViewProps> = ({
           </div>
         </div>
       </div>
-      <div ref={scrollRef} id={`view${count ? count : 0}`} />
     </div>
   )
 }

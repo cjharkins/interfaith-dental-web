@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import Header from '../components/Header'
 import AdminForm from '../components/Forms/AdminForm'
+import NavDrawer from '../components/Drawer/Drawer'
 import { ProgressBar } from '../components/ProgressBar'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
@@ -68,6 +69,7 @@ const Admin: FC = (props): JSX.Element => {
           marginTop: breakpoints.sm ? 178 : 128,
         }}
       >
+        <NavDrawer />
         {questionsAsComponents.map((form) => form)}
       </div>
     </div>
