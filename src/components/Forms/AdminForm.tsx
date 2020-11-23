@@ -37,123 +37,18 @@ const Form: FC<ScrollViewProps> = ({
   questionType,
   questionDisplayOrder,
   count = 0,
-  lastOf = false,
 }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
-  const { questions, answers } = useSelector<RootState, FormState>(
-    ({ form }) => form
-  )
+  const { questions } = useSelector<RootState, FormState>(({ form }) => form)
 
-  const [checked, setChecked] = useState<string>('')
-  const [answerSelected, setAnswerSelected] = useState<any>(
-    questionType === 'freeText' ? '' : []
-  )
-
-  const { isCoveredCounty } = useSelector<RootState, UIState>(
-    (state) => state.ui
-  )
-
-  const [error, setError] = useState<{
-    isError: boolean
-    errorMessage: string
-  }>({ isError: false, errorMessage: '' })
-
-  const handleChangeMultiple = (event: any) => {
-    const { value } = event.target
-    if (
-      Array.isArray(answerSelected) &&
-      answerSelected.some((answer) => answer === value)
-    ) {
-      return
-    } else {
-      return setAnswerSelected(value)
-    }
-  }
-  const setInformationalScreen = () => {
-    if (
-      questionDisplayOrder &&
-      questionDisplayOrder === 6 &&
-      answerChoices
-        ?.filter((a) => a.answerText === answerSelected)[0]
-        .answerDisplayOrder.toString() === '10'
-    ) {
-      handlePostForm({ questions, answers })
-      dispatch(updateMessage('smileOn60', false))
-    }
-
-    const acceptedAnswers = ['3', '9', '12', '20', '23', '75', '76', '84', '95']
-    const answerChoiceOrder =
-      answerChoices
-        ?.filter((a) => a.answerText === answerSelected)[0]
-        .answerDisplayOrder.toString() || ''
-    const countyQuestion = [10, 11, 12]
-    if (
-      questionDisplayOrder &&
-      countyQuestion.includes(questionDisplayOrder) &&
-      acceptedAnswers.includes(answerChoiceOrder) &&
-      isCoveredCounty == false
-    ) {
-      dispatch(setIsCountyCovered(true))
-    }
-    if (
-      questionDisplayOrder &&
-      questionDisplayOrder === 13 &&
-      !isCoveredCounty &&
-      answerChoiceOrder === '1'
-    ) {
-      dispatch(updateMessage('oralHealth', false))
-    }
-  }
-
-  const validatePhone = (value: string): boolean => {
-    return /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/g.test(value)
-  }
-
-  const validateInput = (
-    value: string,
-    questionDisplayOrder: number | undefined
-  ): boolean => {
-    switch (questionDisplayOrder) {
-      case 4 || 9:
-        const isPhone: boolean = validatePhone(value)
-        return isPhone
-      default:
-        if (value.length > 0 && value !== '') {
-          return true
-        } else {
-          return false
-        }
-    }
-  }
-
-  const getErrorMessage = (questionText: string | undefined): string => {
-    switch (questionText) {
-      case 'Phone:':
-        return 'Something is wrong with your phone number'
-      default:
-        if (questionText !== '') {
-          return 'Somthing is wrong.'
-        }
-        return ''
-    }
-  }
+  const [answerSelected, setAnswerSelected] = useState<any>([])
 
   const handleChange = (event: any, questionText: string | undefined) => {
     const { value } = event.target
     setAnswerSelected(value)
     return
   }
-
-  const handleEditToggle = (event: any) => {
-    const id = event.target
-  }
-
-  useEffect(() => {}, [checked])
-
-  useEffect(() => {}, [error])
-
-  const scrollRef = useRef<HTMLDivElement>(null)
 
   return (
     <div
@@ -213,6 +108,9 @@ const Form: FC<ScrollViewProps> = ({
                     variant="outlined"
                     fullWidth
                     required
+                    onChange={(e) => {
+                      return handleChange(e, questionText)
+                    }}
                   ></TextField>
                   {questionType !== 'freeText' ? (
                     <div style={{ marginTop: '1rem' }}>Answers</div>
@@ -238,6 +136,9 @@ const Form: FC<ScrollViewProps> = ({
                                 defaultValue={answerText}
                                 required
                                 variant="outlined"
+                                onChange={(e) => {
+                                  return handleChange(e, questionText)
+                                }}
                               ></TextField>
                             )
                           }
@@ -262,6 +163,9 @@ const Form: FC<ScrollViewProps> = ({
                               defaultValue={answerText}
                               required
                               variant="outlined"
+                              onChange={(e) => {
+                                return handleChange(e, questionText)
+                              }}
                             ></TextField>
                           )
                         )}
@@ -286,6 +190,9 @@ const Form: FC<ScrollViewProps> = ({
                                 defaultValue={answerText}
                                 required
                                 variant="outlined"
+                                onChange={(e) => {
+                                  return handleChange(e, questionText)
+                                }}
                               ></TextField>
                             )
                           }
