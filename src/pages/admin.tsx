@@ -1,35 +1,22 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useState } from 'react'
 import Header from '../components/Header'
 import AdminForm from '../components/Forms/AdminForm'
 import NavDrawer from '../components/Drawer/Drawer'
 import { ProgressBar } from '../components/ProgressBar'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
-import { UIState } from '../store/ui/types'
 import { RootState } from '../store/index'
 import { FormState } from '../store/form/types'
+import { handleFormUpdate } from "../store/form/actions"
+import Button from '@material-ui/core/Button';
 
 const Admin: FC = (props): JSX.Element => {
   const breakpoints: any = useBreakpoint()
 
   const [completed, setCompleted] = useState<number>(0)
-  const [message, setMessage] = useState<string>('')
-
-  const { questionsComplete = 0, informationType = '' } = useSelector<
-    RootState,
-    UIState
-  >((state) => state.ui)
 
   const { questions } = useSelector<RootState, FormState>((state) => state.form)
-
-  const getPercentage = (numCompleted: number, total: number) =>
-    Math.ceil((numCompleted / total) * 100)
-
-  useEffect(() => {
-    setCompleted(getPercentage(questionsComplete, 10))
-    setMessage(message)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionsComplete, informationType])
+  const form = useSelector<RootState, FormState>((state) => state.form)
 
   const questionsAsComponents = [
     ...questions.map((question, index) => (
@@ -71,6 +58,17 @@ const Admin: FC = (props): JSX.Element => {
       >
         <NavDrawer />
         {questionsAsComponents.map((form) => form)}
+        <Button style={{
+            backgroundColor: "#F05033",
+            position: "fixed",
+            color: "white",
+            top: "200px",
+            right: "100px",
+            fontFamily: "inherit",
+            padding: ".75rem 1.5rem",
+            textTransform: "none"
+            }}
+            onClick={() => {handleFormUpdate(form)}}>Save</Button>
       </div>
     </div>
   )

@@ -54,7 +54,7 @@ const NavDrawer: FC<NavDrawerProps> = ({}) => {
               href={`#view${question.questionDisplayOrder}`}
               style={{ textDecoration: 'none', top: '-100px' }}
             >
-              <div style={{ display: 'flex' }}>
+              <div style={{ padding: "0 1rem", display: 'flex' }}>
                 <div style={{ padding: '8px 0', color: '#545859' }}>
                   {question.questionDisplayOrder}.
                 </div>

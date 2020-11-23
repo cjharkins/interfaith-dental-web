@@ -111,3 +111,8 @@ export const handlePostForm = (state: FormState) => {
     console.log(res)
   })
 }
+
+export const handleFormUpdate = (state: FormState) => {
+    console.log("hit update")
+    console.log(state)
+}

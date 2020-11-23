@@ -1,23 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import {
-  Input,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
-  IconButton,
 } from '@material-ui/core'
 import { AnswerObjectProps, FormState } from '../../store/form/types'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ExpandLessIcon from '@material-ui/icons/ExpandLess'
-import EditIcon from '@material-ui/icons/Edit'
-import {
-  updateCount,
-  updateMessage,
-  setIsCountyCovered,
-} from '../../store/ui/actions'
-import { addAnswersToArray, handlePostForm } from '../../store/form/actions'
-import { UIState } from '../../store/ui/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBreakpoint } from '../MediaBreakpointProvider'
 import { RootState } from '../../store'
@@ -31,7 +16,7 @@ export interface ScrollViewProps {
   lastOf: boolean
 }
 
-const Form: FC<ScrollViewProps> = ({
+const AdminForm: FC<ScrollViewProps> = ({
   answerChoices,
   questionText,
   questionType,
@@ -123,10 +108,7 @@ const Form: FC<ScrollViewProps> = ({
                         answerChoices.length > 0 &&
                         answerChoices.map(
                           ({
-                            answerText,
-                            answerType,
-                            answerDisplayOrder,
-                            questionDisplayOrder,
+                            answerText
                           }) => {
                             return (
                               <TextField
@@ -151,10 +133,7 @@ const Form: FC<ScrollViewProps> = ({
                         answerChoices.length > 0 &&
                         answerChoices.map(
                           ({
-                            answerText,
-                            answerType,
-                            answerDisplayOrder,
-                            questionDisplayOrder,
+                            answerText
                           }) => (
                             <TextField
                               fullWidth
@@ -177,10 +156,7 @@ const Form: FC<ScrollViewProps> = ({
                         answerChoices.length > 0 &&
                         answerChoices.map(
                           ({
-                            answerText,
-                            answerType,
-                            answerDisplayOrder,
-                            questionDisplayOrder,
+                            answerText
                           }) => {
                             return (
                               <TextField
@@ -248,4 +224,4 @@ const QuestionHeader: FC<QuestionHeaderProps> = ({
   )
 }
 
-export default Form
+export default AdminForm
