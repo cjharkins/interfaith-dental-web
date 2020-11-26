@@ -7,8 +7,6 @@ import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/index'
 import { FormState } from '../store/form/types'
-import { handleFormUpdate } from "../store/form/actions"
-import Button from '@material-ui/core/Button';
 
 const Admin: FC = (props): JSX.Element => {
   const breakpoints: any = useBreakpoint()
@@ -16,18 +14,20 @@ const Admin: FC = (props): JSX.Element => {
   const [completed, setCompleted] = useState<number>(0)
 
   const { questions } = useSelector<RootState, FormState>((state) => state.form)
-  const form = useSelector<RootState, FormState>((state) => state.form)
 
   const questionsAsComponents = [
     ...questions.map((question, index) => (
       <AdminForm
+        index={index}
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
-        answerChoices={question.answerChoices}
-        questionText={question.questionText}
-        questionDisplayOrder={question.questionDisplayOrder}
-        questionType={question.questionType}
-        lastOf={questions.length - 1 === index}
+        question={question}
+        // answerChoices={question.answerChoices}
+        // questionText={question.questionText}
+        // questionDisplayOrder={question.questionDisplayOrder}
+        // questionType={question.questionType}
+        // language={question.language}
+        // lastOf={questions.length - 1 === index}
       />
     )),
   ]
@@ -58,17 +58,6 @@ const Admin: FC = (props): JSX.Element => {
       >
         <NavDrawer />
         {questionsAsComponents.map((form) => form)}
-        <Button style={{
-            backgroundColor: "#F05033",
-            position: "fixed",
-            color: "white",
-            top: "200px",
-            right: "100px",
-            fontFamily: "inherit",
-            padding: ".75rem 1.5rem",
-            textTransform: "none"
-            }}
-            onClick={() => {handleFormUpdate(form)}}>Save</Button>
       </div>
     </div>
   )

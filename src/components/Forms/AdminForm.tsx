@@ -1,44 +1,82 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
-import {
-  TextField,
-} from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import { AnswerObjectProps, FormState } from '../../store/form/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBreakpoint } from '../MediaBreakpointProvider'
 import { RootState } from '../../store'
+import { handleQuestionUpdate } from '../../store/form/actions'
+import { Question } from '../../store/form/types'
+import Button from '@material-ui/core/Button'
+
+// export interface ScrollViewProps {
+//   count?: number | undefined
+//   answerChoices: AnswerObjectProps[] | undefined
+//   questionDisplayOrder: number | undefined
+//   questionText: string | undefined
+//   questionType: string | undefined
+//   lastOf: boolean
+//   language: string | undefined
+//   index: number
+// }
 
 export interface ScrollViewProps {
   count?: number | undefined
-  answerChoices: AnswerObjectProps[] | undefined
-  questionDisplayOrder: number | undefined
-  questionText: string | undefined
-  questionType: string | undefined
-  lastOf: boolean
+  question: Question
+  index: number
 }
 
-const AdminForm: FC<ScrollViewProps> = ({
-  answerChoices,
-  questionText,
-  questionType,
-  questionDisplayOrder,
-  count = 0,
-}) => {
+const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
   const { questions } = useSelector<RootState, FormState>(({ form }) => form)
+  const {
+    questionText,
+    answerChoices,
+    questionType,
+    questionDisplayOrder,
+  } = question
+  const [updatedQuestion, setQuestionState] = useState(question)
 
-  const [answerSelected, setAnswerSelected] = useState<any>([])
+  const handleQuestionChange = (event: any) => {
+    const { value, name } = event.target
 
-  const handleChange = (event: any, questionText: string | undefined) => {
-    const { value } = event.target
-    setAnswerSelected(value)
-    return
+    console.log(name, value)
+
+    setQuestionState({
+      ...updatedQuestion,
+      [name]: value,
+    })
+  }
+
+  const handleAnswerChange = (event: any) => {
+    const index = parseInt(event.target.getAttribute('data-index'))
+    const { value, name } = event.target
+    const answers = [...updatedQuestion.answerChoices]
+    const prevAnswer = answers[index]
+
+    const updatedAnswer = {
+      ...prevAnswer,
+      [name]: value,
+    }
+
+    const updatedAnswers = answers.map((answer, j) => {
+      console.log(j, index)
+      if (j === index) {
+        return updatedAnswer
+      } else {
+        return answer
+      }
+    })
+
+    setQuestionState({
+      ...updatedQuestion,
+      answerChoices: updatedAnswers,
+    })
   }
 
   return (
     <div
       style={{
-        display: 'flex',
         width: '100%',
         height: '100%',
         justifyContent: 'center',
@@ -65,8 +103,24 @@ const AdminForm: FC<ScrollViewProps> = ({
             style={{
               width: breakpoints.sm ? '100%' : 700,
               background: 'white',
+              position: 'relative',
             }}
           >
+            <Button
+              style={{
+                backgroundColor: '#F05033',
+                color: 'white',
+                fontFamily: 'inherit',
+                padding: '.75rem 1.5rem',
+                textTransform: 'none',
+                position: 'absolute',
+                top: '2.5rem',
+                right: 0,
+              }}
+              // onClick={() => {handleQuestionUpdate(questions)}}
+            >
+              Save
+            </Button>
             <QuestionHeader count={count} description={questionType} />
             <div style={{ padding: '0 30px 30px' }}>
               <div
@@ -90,11 +144,12 @@ const AdminForm: FC<ScrollViewProps> = ({
                       marginTop: '1rem',
                     }}
                     defaultValue={questionText}
+                    name={'questionText'}
                     variant="outlined"
                     fullWidth
                     required
                     onChange={(e) => {
-                      return handleChange(e, questionText)
+                      return handleQuestionChange(e)
                     }}
                   ></TextField>
                   {questionType !== 'freeText' ? (
@@ -106,73 +161,67 @@ const AdminForm: FC<ScrollViewProps> = ({
                     <div style={{ width: '100%', fontSize: 14 }}>
                       {answerChoices !== undefined &&
                         answerChoices.length > 0 &&
-                        answerChoices.map(
-                          ({
-                            answerText
-                          }) => {
-                            return (
-                              <TextField
-                                fullWidth
-                                style={{ display: 'block', marginTop: '1rem' }}
-                                key={answerText}
-                                defaultValue={answerText}
-                                required
-                                variant="outlined"
-                                onChange={(e) => {
-                                  return handleChange(e, questionText)
-                                }}
-                              ></TextField>
-                            )
-                          }
-                        )}
+                        answerChoices.map(({ answerText }, index) => {
+                          return (
+                            <TextField
+                              fullWidth
+                              style={{ display: 'block', marginTop: '1rem' }}
+                              key={answerText}
+                              inputProps={{ 'data-index': index }}
+                              name={'answerText'}
+                              defaultValue={answerText}
+                              required
+                              variant="outlined"
+                              onChange={(e) => {
+                                return handleAnswerChange(e)
+                              }}
+                            ></TextField>
+                          )
+                        })}
                     </div>
                   )}
                   {questionType === 'dropDown' && (
                     <div style={{ width: '100%', fontSize: 14 }}>
                       {answerChoices !== undefined &&
                         answerChoices.length > 0 &&
-                        answerChoices.map(
-                          ({
-                            answerText
-                          }) => (
-                            <TextField
-                              fullWidth
-                              style={{ display: 'block', marginTop: '1rem' }}
-                              key={answerText}
-                              defaultValue={answerText}
-                              required
-                              variant="outlined"
-                              onChange={(e) => {
-                                return handleChange(e, questionText)
-                              }}
-                            ></TextField>
-                          )
-                        )}
+                        answerChoices.map(({ answerText }, index) => (
+                          <TextField
+                            fullWidth
+                            style={{ display: 'block', marginTop: '1rem' }}
+                            key={answerText}
+                            inputProps={{ 'data-index': index }}
+                            defaultValue={answerText}
+                            name={'answerText'}
+                            required
+                            variant="outlined"
+                            onChange={(e) => {
+                              return handleAnswerChange(e)
+                            }}
+                          ></TextField>
+                        ))}
                     </div>
                   )}
                   {questionType === 'multipleSelect' && (
                     <div style={{ width: '100%', fontSize: 14 }}>
                       {answerChoices !== undefined &&
                         answerChoices.length > 0 &&
-                        answerChoices.map(
-                          ({
-                            answerText
-                          }) => {
-                            return (
-                              <TextField
-                                fullWidth
-                                style={{ display: 'block', marginTop: '1rem' }}
-                                key={answerText}
-                                defaultValue={answerText}
-                                required
-                                variant="outlined"
-                                onChange={(e) => {
-                                  return handleChange(e, questionText)
-                                }}
-                              ></TextField>
-                            )
-                          }
-                        )}
+                        answerChoices.map(({ answerText }, index) => {
+                          return (
+                            <TextField
+                              fullWidth
+                              style={{ display: 'block', marginTop: '1rem' }}
+                              key={answerText}
+                              inputProps={{ 'data-index': index }}
+                              defaultValue={answerText}
+                              name={'answerText'}
+                              required
+                              variant="outlined"
+                              onChange={(e) => {
+                                return handleAnswerChange(e)
+                              }}
+                            ></TextField>
+                          )
+                        })}
                     </div>
                   )}
                 </div>
