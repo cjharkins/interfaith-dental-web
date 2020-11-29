@@ -14,7 +14,7 @@ const App: FC<AppProps> = (props): JSX.Element => {
     <Router>
       <Switch>
         <Route exact path="/" component={Public} />
-        <Route exact path="/admin" component={Admin} />
+        <PrivateRoute exact path="/admin" component={Admin} />
       </Switch>
     </Router>
   )

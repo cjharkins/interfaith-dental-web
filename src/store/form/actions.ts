@@ -3,7 +3,6 @@ import {
   GET_QUESTIONS,
   ADD_ANSWERS_TO_ARRAY,
   CustomerAnswers,
-  UPDATE_QUESTION,
 } from './types'
 import { QUESTIONS_LENGTH } from '../ui/types'
 const serverUrl =
@@ -111,16 +110,4 @@ export const handlePostForm = (state: FormState) => {
   }).then((res) => {
     console.log(res)
   })
-}
-
-export const handleQuestionUpdate = (
-  key: string,
-  index: number,
-  updatedData: string
-) => async (dispatch: (arg0: { type: string; payload: string }) => void) => {
-  console.log(key, index, updatedData)
-  // dispatch({
-  //   type: UPDATE_QUESTION,
-  //   payload: questionData,
-  // })
 }

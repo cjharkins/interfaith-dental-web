@@ -1,23 +1,11 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { TextField } from '@material-ui/core'
-import { AnswerObjectProps, FormState } from '../../store/form/types'
+import { FormState } from '../../store/form/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBreakpoint } from '../MediaBreakpointProvider'
 import { RootState } from '../../store'
-import { handleQuestionUpdate } from '../../store/form/actions'
 import { Question } from '../../store/form/types'
 import Button from '@material-ui/core/Button'
-
-// export interface ScrollViewProps {
-//   count?: number | undefined
-//   answerChoices: AnswerObjectProps[] | undefined
-//   questionDisplayOrder: number | undefined
-//   questionText: string | undefined
-//   questionType: string | undefined
-//   lastOf: boolean
-//   language: string | undefined
-//   index: number
-// }
 
 export interface ScrollViewProps {
   count?: number | undefined
@@ -40,8 +28,6 @@ const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
   const handleQuestionChange = (event: any) => {
     const { value, name } = event.target
 
-    console.log(name, value)
-
     setQuestionState({
       ...updatedQuestion,
       [name]: value,
@@ -60,7 +46,6 @@ const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
     }
 
     const updatedAnswers = answers.map((answer, j) => {
-      console.log(j, index)
       if (j === index) {
         return updatedAnswer
       } else {
@@ -72,6 +57,10 @@ const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
       ...updatedQuestion,
       answerChoices: updatedAnswers,
     })
+  }
+
+  const handleQuestionUpdate = (data: object) => {
+    console.log(data)
   }
 
   return (
@@ -117,7 +106,9 @@ const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
                 top: '2.5rem',
                 right: 0,
               }}
-              // onClick={() => {handleQuestionUpdate(questions)}}
+              onClick={() => {
+                handleQuestionUpdate(updatedQuestion)
+              }}
             >
               Save
             </Button>
@@ -139,14 +130,15 @@ const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
                 >
                   <div style={{ marginTop: '1rem' }}>Question</div>
                   <TextField
+                    fullWidth
                     style={{
                       fontSize: breakpoints.sm ? '1.5em' : 36,
                       marginTop: '1rem',
                     }}
-                    defaultValue={questionText}
+                    key={questionText}
                     name={'questionText'}
+                    defaultValue={questionText}
                     variant="outlined"
-                    fullWidth
                     required
                     onChange={(e) => {
                       return handleQuestionChange(e)

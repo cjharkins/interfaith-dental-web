@@ -22,12 +22,6 @@ const Admin: FC = (props): JSX.Element => {
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
         question={question}
-        // answerChoices={question.answerChoices}
-        // questionText={question.questionText}
-        // questionDisplayOrder={question.questionDisplayOrder}
-        // questionType={question.questionType}
-        // language={question.language}
-        // lastOf={questions.length - 1 === index}
       />
     )),
   ]
