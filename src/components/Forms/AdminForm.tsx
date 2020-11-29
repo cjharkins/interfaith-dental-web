@@ -1,6 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
-import { TextField } from '@material-ui/core'
+import { CircularProgress, TextField } from '@material-ui/core'
+import { withStyles, Theme } from '@material-ui/core'
 import { FormState } from '../../store/form/types'
+import { AuthState } from '../../store/auth/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useBreakpoint } from '../MediaBreakpointProvider'
 import { RootState } from '../../store'
@@ -13,10 +15,31 @@ export interface ScrollViewProps {
   index: number
 }
 
+const SaveButton = withStyles((theme: Theme) => ({
+  root: {
+    backgroundColor: '#F05033',
+    color: 'white',
+    fontFamily: 'inherit',
+    padding: '.75rem 1.5rem',
+    textTransform: 'none',
+    position: 'absolute',
+    top: '2.5rem',
+    right: 0,
+    '&:disabled': {
+      backgroundColor: '#bbb',
+    },
+    '&:hover': {
+      backgroundColor: '#dd4a30',
+    },
+  },
+}))(Button)
+
 const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
   const dispatch = useDispatch()
   const breakpoints: any = useBreakpoint()
   const { questions } = useSelector<RootState, FormState>(({ form }) => form)
+  const { apiKey } = useSelector<RootState, AuthState>(({ auth }) => auth)
+  const [loading, setLoading] = React.useState(false)
   const {
     questionText,
     answerChoices,
@@ -59,8 +82,25 @@ const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
     })
   }
 
-  const handleQuestionUpdate = (data: object) => {
+  const handleQuestionUpdate = async (data: any) => {
+    const serverUrl = `https://cors-anywhere.herokuapp.com/https://interfaith-api.bluebunny.systems/api/questions/${data.questionDisplayOrder}/${data.language}`
     console.log(data)
+    try {
+      setLoading(true)
+      const response = await fetch(serverUrl, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+          'api-key': apiKey,
+        },
+        body: JSON.stringify(data),
+      })
+      setLoading(false)
+      console.log(response)
+    } catch (err) {
+      setLoading(false)
+      console.log(err)
+    }
   }
 
   return (
@@ -95,23 +135,31 @@ const AdminForm: FC<ScrollViewProps> = ({ count, question }) => {
               position: 'relative',
             }}
           >
-            <Button
+            <div
               style={{
-                backgroundColor: '#F05033',
-                color: 'white',
-                fontFamily: 'inherit',
-                padding: '.75rem 1.5rem',
-                textTransform: 'none',
-                position: 'absolute',
-                top: '2.5rem',
-                right: 0,
-              }}
-              onClick={() => {
-                handleQuestionUpdate(updatedQuestion)
+                position: 'relative',
               }}
             >
-              Save
-            </Button>
+              <SaveButton
+                disabled={loading}
+                onClick={() => {
+                  handleQuestionUpdate(updatedQuestion)
+                }}
+              >
+                Save
+              </SaveButton>
+              {loading && (
+                <CircularProgress
+                  style={{
+                    color: '#F05033',
+                    position: 'absolute',
+                    top: '3.2rem',
+                    right: '4%',
+                  }}
+                  size={24}
+                />
+              )}
+            </div>
             <QuestionHeader count={count} description={questionType} />
             <div style={{ padding: '0 30px 30px' }}>
               <div
