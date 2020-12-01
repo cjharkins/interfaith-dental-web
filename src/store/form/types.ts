@@ -9,11 +9,13 @@ export interface AnswerObjectProps {
   answerDisplayOrder: string
   questionDisplayOrder: string
 }
-interface Question {
+
+export interface Question {
   answerChoices: AnswerObjectProps[] | undefined
   questionDisplayOrder: number | undefined
   questionText: string | undefined
   questionType: string | undefined
+  language: string | undefined
 }
 
 export interface FormState {
@@ -23,6 +25,7 @@ export interface FormState {
 
 export const GET_QUESTIONS = 'GET_QUESTIONS'
 export const ADD_ANSWERS_TO_ARRAY = 'ADD_ANSWERS_TO_ARRAY'
+export const UPDATE_QUESTION = 'UPDATE_QUESTION'
 
 interface GetQuestionsAction {
   type: typeof GET_QUESTIONS
@@ -34,4 +37,12 @@ interface AddAnswersAction {
   payload: CustomerAnswers
 }
 
-export type FormActionTypes = GetQuestionsAction | AddAnswersAction
+interface UpdateQuestion {
+  type: typeof UPDATE_QUESTION
+  payload: Question
+}
+
+export type FormActionTypes =
+  | GetQuestionsAction
+  | AddAnswersAction
+  | UpdateQuestion

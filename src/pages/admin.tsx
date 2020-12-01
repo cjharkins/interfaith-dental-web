@@ -1,10 +1,10 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useState } from 'react'
 import Header from '../components/Header'
 import AdminForm from '../components/Forms/AdminForm'
+import NavDrawer from '../components/Drawer/Drawer'
 import { ProgressBar } from '../components/ProgressBar'
 import { useBreakpoint } from '../components/MediaBreakpointProvider'
 import { useSelector } from 'react-redux'
-import { UIState } from '../store/ui/types'
 import { RootState } from '../store/index'
 import { FormState } from '../store/form/types'
 
@@ -12,34 +12,16 @@ const Admin: FC = (props): JSX.Element => {
   const breakpoints: any = useBreakpoint()
 
   const [completed, setCompleted] = useState<number>(0)
-  const [message, setMessage] = useState<string>('')
-
-  const { questionsComplete = 0, informationType = '' } = useSelector<
-    RootState,
-    UIState
-  >((state) => state.ui)
 
   const { questions } = useSelector<RootState, FormState>((state) => state.form)
-
-  const getPercentage = (numCompleted: number, total: number) =>
-    Math.ceil((numCompleted / total) * 100)
-
-  useEffect(() => {
-    setCompleted(getPercentage(questionsComplete, 10))
-    setMessage(message)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [questionsComplete, informationType])
 
   const questionsAsComponents = [
     ...questions.map((question, index) => (
       <AdminForm
+        index={index}
         key={'n' + question.questionDisplayOrder}
         count={question.questionDisplayOrder}
-        answerChoices={question.answerChoices}
-        questionText={question.questionText}
-        questionDisplayOrder={question.questionDisplayOrder}
-        questionType={question.questionType}
-        lastOf={questions.length - 1 === index}
+        question={question}
       />
     )),
   ]
@@ -68,6 +50,7 @@ const Admin: FC = (props): JSX.Element => {
           marginTop: breakpoints.sm ? 178 : 128,
         }}
       >
+        <NavDrawer />
         {questionsAsComponents.map((form) => form)}
       </div>
     </div>

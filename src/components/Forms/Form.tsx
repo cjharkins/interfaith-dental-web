@@ -130,7 +130,7 @@ const Form: FC<ScrollViewProps> = ({
         return 'Something is wrong with your phone number'
       default:
         if (questionText !== '') {
-          return 'Somthing is wrong.'
+          return 'Something is wrong.'
         }
         return ''
     }
