@@ -359,6 +359,11 @@ const Form: FC<ScrollViewProps> = ({
                     //   (q) => q.questionDisplayOrder !== 15
                     // )
                   } else if (
+                    questionDisplayOrder === 16 &&
+                    selectedAnswerOrderNumber == '2'
+                  ) {
+                    dispatch(updateCount(20))
+                  } else if (
                     questionDisplayOrder === 23 &&
                     selectedAnswerOrderNumber == '2'
                   ) {
@@ -413,7 +418,11 @@ const Form: FC<ScrollViewProps> = ({
                         (k) => k + 1
                       )
                     }
-                    return matrix[familySize].some((i) => income === i)
+                    const formattedFamilySize = familySize.includes('+')
+                      ? familySize.replace('+', '')
+                      : familySize
+
+                    return matrix[formattedFamilySize].some((i) => income === i)
                   }
 
                   const isQualified = incomeQualificationCheck(
